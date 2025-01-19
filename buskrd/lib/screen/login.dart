@@ -50,9 +50,9 @@ class _AccountPageState extends State<AccountPage> {
                 // Logo Section
                 Image.asset(
                   'assets/images/new_logo.png', // Replace with your logo asset
-                  height: 100,
+                  height: 200,
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 60),
 
                 // Phone Number Input Section (using InternationalPhoneNumberInput)
                 Container(
@@ -91,7 +91,7 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
 
                 // Login Button
                 SizedBox(
@@ -118,50 +118,39 @@ class _AccountPageState extends State<AccountPage> {
                 const SizedBox(height: 20),
 
                 // Divider and Sign-Up Suggestion
-                const Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 1,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text("If you don't have an account",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 1,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                // Sign-Up Button
-                SizedBox( 
-                  width: 150,
-                  child: 
-                ElevatedButton(
-                  onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Signup()),
-                  );
-                  },
-                  style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.5),
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  ),
-                  child: const Text(
-                  'Sign Up',
-                  style: TextStyle(color: Colors.white),
-                  ),
-                ),
-            ),],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Don't have an account?",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Signup(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.white,
+                              decorationThickness: 2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+              ],
             ),
           ),
         ),

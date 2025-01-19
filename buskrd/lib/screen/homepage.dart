@@ -50,49 +50,54 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return Scaffold(  
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 33, 32, 70),
+        toolbarHeight: 80, // Reduced the height for the search bar
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align search bar and button to opposite sides
         children: [
-          Container(
-            color: const Color.fromARGB(255, 33, 32, 70),
-            height: 80, // Reduced the height for the search bar
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align search bar and button to opposite sides
-                children: [
-                  // Search bar
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.75, // Adjust the width of the search bar
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: const InputDecoration(
-                        hintText: 'Search...',
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.black54),
-                      ),
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      // Favorite button action
-                    },
-                    icon: const Icon(
-                      Icons.favorite_border_sharp, // Heart icon (outline)
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
+          // Search bar
+          Flexible(
+            child: Container(
+          width: MediaQuery.of(context).size.width * 0.75, // Adjust the width of the search bar
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          child: TextField(
+            controller: _searchController,
+            decoration: const InputDecoration(
+              hintText: 'Search...',
+              border: InputBorder.none,
+              hintStyle: TextStyle(color: Colors.black54),
+            ),
+            style: const TextStyle(color: Colors.black),
+          ),
             ),
           ),
+          SizedBox(width: 16), // Add some space between the search bar and the icon button
+          IconButton(
+            onPressed: () {
+              // Open a list when the favorite button is pressed
+             
+            },
+            icon: const Icon(
+          Icons.favorite_border_sharp, // Heart icon (outline)
+          color: Colors.white,
+          size: 30,
+            ),
+          ),
+        ],
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
           Expanded(
             flex: 8,
             child: Container(
@@ -109,5 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onItemTapped: _onItemTapped,
       ), 
     );
+    
   }
 }
