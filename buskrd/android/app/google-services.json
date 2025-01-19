@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875415667877",
+    "project_id": "buskrd-14490",
+    "storage_bucket": "buskrd-14490.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875415667877:android:311fe4dee48b890d24794c",
+        "android_client_info": {
+          "package_name": "com.example.buskrd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1r8F1cnW9ZDIf3iRBnmGfxrwZhu7DqFc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
