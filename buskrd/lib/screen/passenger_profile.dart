@@ -1,5 +1,6 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+
+import 'package:buskrd/screen/passenger_info.dart';
+
 
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
 import 'package:buskrd/screen/homepage.dart';
@@ -17,18 +18,7 @@ class PassengerProfile extends StatefulWidget {
 
 class _PassengerProfileState extends State<PassengerProfile> {
   int _selectedIndex = 0;
-  File? _image;
-
-  Future<void> _pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
+  
 
   void _onItemTapped(int index) {
     setState(() {
@@ -67,52 +57,27 @@ class _PassengerProfileState extends State<PassengerProfile> {
             padding: const EdgeInsets.symmetric(vertical: 30),
             alignment: Alignment.center,
             color: Color.fromARGB(255, 33, 32, 70),
-            child: Column(
+            child: const Column(
               children: [
                 Stack(
                   children: [
                     CircleAvatar(
                       radius: 50,
-                      backgroundImage:
-                          _image != null ? FileImage(_image!) : null,
-                      child: _image == null
-                          ? IconButton(
-                              icon: Icon(
-                                Icons.person,
-                                size: 50,
-                              ),
-                              onPressed: () => _pickImage(ImageSource.gallery),
-                            )
-                          : null,
-                    ),
-                    Positioned(
-                      bottom: 4, // Adjust closer to the CircleAvatar
-                      right: 4, // Adjust closer to the CircleAvatar
-                      child: Container(
-                      width: 20, // Size of the yellow circle
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.yellow,
-                        shape: BoxShape.circle,
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.person,
+                          size: 50, color: Color.fromARGB(255, 10, 57, 122)),
+                    
                       ),
-                      child: Center(
-                        child: IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: Icon(Icons.add, size: 16),
-                        onPressed: () => _pickImage(ImageSource.camera),
-                        ),
-                      ),
-                      ),
-                    ),
+                    
                   ],
                 ),
-                const SizedBox(height: 10),
-                const Text(
+                SizedBox(height: 10),
+                Text(
                   'Ahmad Mhamad',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
-                const SizedBox(height: 10),
-                const Text(
+                SizedBox(height: 10),
+                Text(
                   '+9647707580973',
                   style: TextStyle(color: Colors.white),
                 ),
@@ -147,7 +112,9 @@ class _PassengerProfileState extends State<PassengerProfile> {
                       trailing: const Icon(Icons.arrow_forward_ios),
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 0),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const PassengerAccInfo()));
+                      },
                     ),
                   ),
                   Container(

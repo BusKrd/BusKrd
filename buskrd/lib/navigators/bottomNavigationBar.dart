@@ -8,18 +8,8 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color.fromARGB(255, 156, 39, 176),
-            Color.fromARGB(255, 233, 30, 99),
-          ],
-        ),
-      ),
-      child: BottomNavigationBar(
+    
+    return BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: onItemTapped,
         items: [
@@ -44,7 +34,6 @@ class BottomNavigation extends StatelessWidget {
             label: '',
           ),
         ],
-      ),
-    );
+      );
   }
 }
