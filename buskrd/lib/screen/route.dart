@@ -56,7 +56,14 @@ class _RouteScreenState extends State<RouteScreen> {
           Container(
             height: 200, // Adjust the height for the top section
             decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 33, 32, 70),
+              gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 156, 39, 176),
+                Color.fromARGB(255, 233, 30, 99),
+              ],
+            ),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(30),
                 bottomRight: Radius.circular(30),

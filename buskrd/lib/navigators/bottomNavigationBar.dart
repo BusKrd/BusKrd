@@ -12,26 +12,28 @@ class BottomNavigation extends StatelessWidget {
     return BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: onItemTapped,
-        items: [
+        selectedItemColor: Colors.blue, // Color for selected item
+       unselectedItemColor: Colors.grey, 
+        items: const [
           BottomNavigationBarItem(
-            icon: Image.asset('assets/images/home.png', width: 24, height: 24), // Custom Home Icon
-            label: '',
+            icon: Icon(Icons.home_filled,color: Color.fromARGB(255, 0, 0, 0)), // Custom Home Icon
+            label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/images/route.png', width: 24, height: 24), // Custom Route Icon
-            label: '',
+            icon: Icon(Icons.route,color: Color.fromARGB(255, 0, 0, 0)), // Custom Route Icon
+            label: 'Route',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/images/reserve.png', width: 24, height: 24), // Custom Notifications Icon
-            label: '',
+            icon: Icon(Icons.book,color: Color.fromARGB(255, 0, 0, 0)), // Custom Reservation Icon
+            label: 'Reservation',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/images/notification.png', width: 24, height: 24), // Custom Messages Icon
-            label: '',
+            icon: Icon(Icons.notifications_active,color: Color.fromARGB(255, 0, 0, 0)), // Custom Noticiction Icon
+            label: 'Notifications',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/images/profile.png', width: 24, height: 24), // Custom Profile Icon
-            label: '',
+            icon: Icon(Icons.person, color: Color.fromARGB(255, 0, 0, 0)), // Custom Profile Icon
+            label: 'Profile',
           ),
         ],
       );

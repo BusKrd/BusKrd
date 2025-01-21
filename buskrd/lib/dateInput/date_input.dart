@@ -33,7 +33,7 @@ class _DateInputState extends State<DateInput> {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFEDE7F6), // Light lavender background
+        color: const Color.fromARGB(255, 255, 255, 255), // Light lavender background
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -44,7 +44,7 @@ class _DateInputState extends State<DateInput> {
             style: TextStyle(
               fontSize: 14,
               color: Colors.black54,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 10),
@@ -56,7 +56,7 @@ class _DateInputState extends State<DateInput> {
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.black,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               GestureDetector(
@@ -77,7 +77,7 @@ class _DateInputState extends State<DateInput> {
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.black54,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 5),

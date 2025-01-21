@@ -129,7 +129,8 @@ class _PassengerAccInfoState extends State<PassengerAccInfo> {
               underline: const SizedBox(),
               isExpanded: true,
               items: listItem.map((String value) {
-                return DropdownMenuItem<String>(value: value, child: Text(value));
+                return DropdownMenuItem<String>(
+                    value: value, child: Text(value));
               }).toList(),
               onChanged: (String? newValue) {
                 if (newValue != null) {
@@ -284,10 +285,10 @@ class _PassengerAccInfoState extends State<PassengerAccInfo> {
         shape: const StadiumBorder(),
         backgroundColor: Colors.yellow,
         foregroundColor: Colors.black,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
       ),
       child: const SizedBox(
-        width: 70,
+        width: 90,
         child: Text(
           "Save Changes",
           textAlign: TextAlign.center,

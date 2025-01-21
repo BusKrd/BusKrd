@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Navigate to the Route screen when the second icon (index 1) is tapped
     if (index == 1) {
+      
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const RouteScreen()),
@@ -51,9 +52,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(  
-      appBar: AppBar(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 156, 39, 176),
+                Color.fromARGB(255, 233, 30, 99),
+              ],
+            ),
+          ),
+          child: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 33, 32, 70),
+        backgroundColor: Colors.transparent,
+         elevation: 0,
         toolbarHeight: 80, // Reduced the height for the search bar
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -95,7 +110,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
           ),
         ),
+         
       ),
+       ),
+      ),
+      backgroundColor: Colors.transparent,
       body: Column(
         children: [
           Expanded(

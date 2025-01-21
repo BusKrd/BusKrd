@@ -1,3 +1,4 @@
+import 'package:buskrd/screen/busSelection.dart';
 import 'package:buskrd/screen/passenger_notification.dart';
 import 'package:buskrd/screen/passenger_profile.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,10 @@ class SeatReservation extends StatefulWidget {
 
 class _SeatReservationState extends State<SeatReservation> {
   int _selectedIndex = 0;
-  TextEditingController textFieldController1 = TextEditingController();
-  TextEditingController textFieldController2 = TextEditingController();
+ final TextEditingController fromController = TextEditingController();
+  final TextEditingController toController = TextEditingController();
+  final List<String> cities = ['Sulaymaniah', 'Hawler', 'Duhok', 'Zaxo','Kirkuk','Penjwen','Halabja','Bazian','Piramagrun'];
+
   TextEditingController dateController = TextEditingController();
 
   void _onItemTapped(int index) {
@@ -47,24 +50,31 @@ class _SeatReservationState extends State<SeatReservation> {
   }
 
   // Input field widget to avoid repetition
-  Widget _inputField(String hintText, TextEditingController controller) {
+  Widget _dropdownField(String hintText, TextEditingController controller) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(22),
       borderSide: const BorderSide(color: Colors.white),
     );
 
-    return TextField(
-      style: const TextStyle(color: Colors.white),
-      controller: controller,
+    return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.white),
         enabledBorder: border,
         focusedBorder: border,
       ),
+      dropdownColor: Colors.black,
+      items: cities.map((String city) {
+        return DropdownMenuItem<String>(
+          value: city,
+          child: Text(city, style: const TextStyle(color: Colors.white)),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        controller.text = newValue!;
+      },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
@@ -78,7 +88,14 @@ class _SeatReservationState extends State<SeatReservation> {
             Container(
               height: MediaQuery.of(context).size.height * 0.35,
               decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 33, 32, 70),
+                gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 156, 39, 176),
+                Color.fromARGB(255, 233, 30, 99),
+              ],
+            ),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
@@ -99,9 +116,9 @@ class _SeatReservationState extends State<SeatReservation> {
                     ),
 
                     const SizedBox(height: 10),
-                    _inputField("From", textFieldController1),
+                    _dropdownField("From", fromController),
                     const SizedBox(height: 10),
-                    _inputField("To", textFieldController2),
+                    _dropdownField("To", toController),
                   ],
                 ),
               ),
@@ -116,13 +133,13 @@ class _SeatReservationState extends State<SeatReservation> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     DateInput(dateController: dateController),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 80),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/reservation1');
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => BusSelection(city1: fromController.text, city2: toController.text)));
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellow,
+                        backgroundColor: const Color(0xFFFEB958),
                         shape: const StadiumBorder(),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 50, vertical: 15),
@@ -130,7 +147,7 @@ class _SeatReservationState extends State<SeatReservation> {
                       child: const Text(
                         "Continue",
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                            fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white),
                       ),
                     ),
                   ],

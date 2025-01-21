@@ -27,11 +27,25 @@ class _SignupPageState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromARGB(255, 156, 39, 176),
+              Color.fromARGB(255, 233, 30, 99),
+            ],
+          ),
+        ),
+        child: Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 33, 32, 70),
+       
         iconTheme: const IconThemeData(color: Colors.white),
+     backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -45,7 +59,9 @@ class _SignupPageState extends State<Signup> {
         ),
         child: _page(),
       ),
-    );
+        ),
+      );
+    
   }
 
   Widget _page() {

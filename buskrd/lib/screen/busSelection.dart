@@ -1,55 +1,100 @@
+import 'package:buskrd/screen/payment.dart';
 import 'package:flutter/material.dart';
 
-class Reservation1 extends StatefulWidget {
-  const Reservation1({super.key});
+class BusSelection extends StatefulWidget {
+  final String city1;
+  final String city2;
+  BusSelection({super.key, required this.city1, required this.city2});
 
   @override
-  _Reservation1State createState() => _Reservation1State();
+  _BusSelectionState createState() => _BusSelectionState();
 }
 
-class _Reservation1State extends State<Reservation1> {
-  TextEditingController textFieldController1 = TextEditingController();
-  TextEditingController textFieldController2 = TextEditingController();
+class _BusSelectionState extends State<BusSelection> {
+  final TextEditingController fromController = TextEditingController();
+  final TextEditingController toController = TextEditingController();
+  final List<String> cities = [
+    'Sulaymaniah',
+    'Hawler',
+    'Duhok',
+    'Zaxo',
+    'Kirkuk',
+    'Penjwen',
+    'Halabja',
+    'Bazian',
+    'Piramagrun'
+  ];
 
   // List of bus options with time intervals
   final List<Map<String, String>> buses = [
-    {"bus": "Bus A", "time": "10:00 - 12:00"},
-    {"bus": "Bus B", "time": "12:00 - 14:00"},
-    {"bus": "Bus C", "time": "14:00 - 16:00"},
-    {"bus": "Bus D", "time": "16:00 - 18:00"},
-    {"bus": "Bus E", "time": "18:00 - 20:00"},
-    {"bus": "Bus F", "time": "20:00 - 22:00"},
+    {"bus": "Bus A", "time": "10:00 - 12:00", "route": "Kirkuk"},
+    {"bus": "Bus B", "time": "12:00 - 14:00", "route": "Dukan"},
+    {"bus": "Bus C", "time": "14:00 - 16:00", "route": "Kani shaitan"},
+    {"bus": "Bus D", "time": "16:00 - 18:00", "route": "Kirkuk"},
+    {"bus": "Bus E", "time": "18:00 - 20:00", "route": "Dukan"},
+    {"bus": "Bus F", "time": "20:00 - 22:00", "route": "Dukan"},
   ];
 
   // Input Field Widget
-  Widget _inputField(String hintText, TextEditingController controller) {
+  Widget _dropdownField(String hintText, TextEditingController controller) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(22),
       borderSide: const BorderSide(color: Colors.white),
     );
 
-    return TextField(
-      style: const TextStyle(color: Colors.white), // White text color
-      controller: controller,
+    return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white), // White hint text
+        hintStyle: const TextStyle(color: Colors.white),
         enabledBorder: border,
         focusedBorder: border,
-        filled: false, // Transparent background
       ),
+      dropdownColor: Colors.black,
+      items: cities.map((String city) {
+        return DropdownMenuItem<String>(
+          value: city,
+          child: Text(city, style: const TextStyle(color: Colors.white)),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        controller.text = newValue!;
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 33, 32, 70),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 156, 39, 176),
+                Color.fromARGB(255, 233, 30, 99),
+              ],
+            ),
+          ),
+          child: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+            title: const Text(
+              'Bus selection',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
         iconTheme: const IconThemeData(
           color: Colors.white, // Set the back arrow color to white
         ),
       ),
+        ),
+      ),
+      backgroundColor: Colors.transparent,
+    
       body: Column(
         children: [
           // Top Half with rounded bottom corners (now filling horizontally)
@@ -57,7 +102,14 @@ class _Reservation1State extends State<Reservation1> {
             width: double.infinity, // Make it fill horizontally
             height: 172, // Adjust height as needed
             decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 33, 32, 70), // Background color
+             gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.fromARGB(255, 156, 39, 176),
+                  Color.fromARGB(255, 233, 30, 99),
+                ],
+              ), // Background color
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(30), // Rounded bottom-left corner
                 bottomRight: Radius.circular(30), // Rounded bottom-right corner
@@ -70,10 +122,10 @@ class _Reservation1State extends State<Reservation1> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // First Input Field (From)
-                  _inputField("From", textFieldController1),
+                  _dropdownField(widget.city1, fromController),
                   const SizedBox(height: 10), // Space between text fields
                   // Second Input Field (To)
-                  _inputField("To", textFieldController2),
+                  _dropdownField(widget.city2, toController),
                   const SizedBox(height: 10), // Space between text fields
                 ],
               ),
@@ -84,10 +136,7 @@ class _Reservation1State extends State<Reservation1> {
             child: Container(
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30), // Rounded top-left corner
-                  topRight: Radius.circular(30), // Rounded top-right corner
-                ),
+                
               ),
               child: Column(
                 children: [
@@ -143,6 +192,15 @@ class _Reservation1State extends State<Reservation1> {
                                         color: Colors.black54,
                                       ),
                                     ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      buses[index]["route"]!, // Time interval
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 // Right side (Bus icon)
@@ -155,7 +213,15 @@ class _Reservation1State extends State<Reservation1> {
                             ),
                             onTap: () {
                               // Handle bus selection (for now it just prints)
-                              Navigator.pushNamed(context, '/payment');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Payment(
+                                          bus: buses[index]["bus"]!,
+                                          time: buses[index]["time"]!,
+                                          route: buses[index]["route"]!,
+                                          city1: widget.city1,
+                                          city2: widget.city2)));
                             },
                           ),
                         );

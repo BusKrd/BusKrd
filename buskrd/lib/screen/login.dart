@@ -107,12 +107,12 @@ class _AccountPageState extends State<AccountPage> {
                   // Add login logic here
                   },
                   style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.5),
+                  backgroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15), // Text color
                   ),
                   child: const Text(
                   'Login',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
                   ),
                 )),
                 const SizedBox(height: 20),

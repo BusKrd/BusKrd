@@ -47,7 +47,7 @@ class DecisionsScreen extends StatelessWidget {
                               builder: (context) => const AccountPage()));
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.5),
+                        backgroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       minimumSize: const Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
@@ -57,7 +57,7 @@ class DecisionsScreen extends StatelessWidget {
                     child: const Text(
                       'Passenger',
                       style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
+                        
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
@@ -75,7 +75,7 @@ class DecisionsScreen extends StatelessWidget {
                               builder: (context) => DriverScreen()));
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.5),
+                      backgroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       minimumSize: const Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
@@ -85,7 +85,7 @@ class DecisionsScreen extends StatelessWidget {
                     child: const Text(
                       'Driver',
                       style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
+                       
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
