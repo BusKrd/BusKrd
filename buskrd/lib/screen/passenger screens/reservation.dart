@@ -1,10 +1,10 @@
-import 'package:buskrd/screen/busSelection.dart';
-import 'package:buskrd/screen/passenger_notification.dart';
-import 'package:buskrd/screen/passenger_profile.dart';
+import 'package:buskrd/screen/passenger%20screens/busSelection.dart';
+import 'package:buskrd/screen/passenger%20screens/passenger_notification.dart';
+import 'package:buskrd/screen/passenger%20screens/passenger_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
-import 'package:buskrd/screen/homepage.dart';
-import 'package:buskrd/screen/route.dart';
+import 'package:buskrd/screen/passenger%20screens/homepage.dart';
+import 'package:buskrd/screen/passenger%20screens/route.dart';
 import 'package:buskrd/dateInput/date_input.dart';
 
 class SeatReservation extends StatefulWidget {

@@ -1,9 +1,9 @@
-import 'package:buskrd/screen/passenger_notification.dart';
-import 'package:buskrd/screen/passenger_profile.dart';
+import 'package:buskrd/screen/passenger%20screens/passenger_notification.dart';
+import 'package:buskrd/screen/passenger%20screens/passenger_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:buskrd/screen/homepage.dart';
+import 'package:buskrd/screen/passenger%20screens/homepage.dart';
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
-import 'package:buskrd/screen/reservation.dart';
+import 'package:buskrd/screen/passenger%20screens/reservation.dart';
 
 class RouteScreen extends StatefulWidget {
   const RouteScreen({super.key});

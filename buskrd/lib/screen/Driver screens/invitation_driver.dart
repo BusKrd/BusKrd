@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:buskrd/screen/bus_information.dart';
+import 'package:buskrd/screen/Driver%20screens/bus_signup.dart';
 
-class DriverScreen extends StatelessWidget {
-  const DriverScreen({super.key});
+class InvitationDriver extends StatelessWidget {
+  const InvitationDriver({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return Container(
         // Using gradient background
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -19,7 +18,20 @@ class DriverScreen extends StatelessWidget {
             ],
           ),
         ),
-        child: Padding(
+        child: Scaffold(
+          appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      backgroundColor: Colors.transparent,
+        body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,7 +105,7 @@ class DriverScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BusInformation()));
+                          builder: (context) => BusSignup()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 116, 11, 98),

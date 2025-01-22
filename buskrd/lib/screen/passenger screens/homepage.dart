@@ -1,9 +1,10 @@
-import 'package:buskrd/screen/passenger_notification.dart';
-import 'package:buskrd/screen/passenger_profile.dart';
+import 'package:buskrd/screen/passenger%20screens/passenger_notification.dart';
+import 'package:buskrd/screen/passenger%20screens/passenger_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:buskrd/screen/reservation.dart';
-import 'package:buskrd/screen/route.dart';
+import 'package:buskrd/screen/passenger%20screens/reservation.dart';
+import 'package:buskrd/screen/passenger%20screens/route.dart';
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
+import 'package:flutter/rendering.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final TextEditingController _searchController = TextEditingController();
+
+  final List<Map<String, String>> buses = [
+    {"Place":"Place 1"},
+    {"Place":"Place 2"},
+    {"Place":"Place 3"},
+    {"Place":"Place 4"},
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -95,10 +103,78 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
             ),
           ),
-          SizedBox(width: 16), // Add some space between the search bar and the icon button
-          IconButton(
-            onPressed: () {
-              // Open a list when the favorite button is pressed
+          SizedBox(width: 16), 
+          
+        ],
+          ),
+        ),
+         actions: [
+          IconButton(onPressed: () {
+            
+          Column(
+                children: [
+                  const SizedBox(
+                      height: 20), // Space between container top and title
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      'Favorates',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10), // Space after the title
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: buses.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 5.0, horizontal: 20.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          elevation: 5,
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Left side (Bus number and time interval)
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      buses[index]["place"]!, // Bus name
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    
+                                  ],
+                                ),
+                                // Right side (Bus icon)
+                                const Icon(
+                                  Icons.favorite, // Bus icon
+                                  color: Colors.red,
+                                  size: 30,
+                                ),
+                              ],
+                            ),
+                            
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
              
             },
             icon: const Icon(
@@ -107,10 +183,10 @@ class _HomeScreenState extends State<HomeScreen> {
           size: 30,
             ),
           ),
-        ],
-          ),
-        ),
-         
+
+
+
+         ],
       ),
        ),
       ),
@@ -128,6 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      
       bottomNavigationBar:BottomNavigation(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,

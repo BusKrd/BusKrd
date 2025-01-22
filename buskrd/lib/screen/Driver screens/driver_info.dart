@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
-class PassengerAccInfo extends StatefulWidget {
-  const PassengerAccInfo({super.key});
+class DriverInformation extends StatefulWidget {
+  const DriverInformation({super.key});
 
   @override
-  State<PassengerAccInfo> createState() => _PassengerAccInfoState();
+  State<DriverInformation> createState() => _DriverInformationState();
 }
 
-class _PassengerAccInfoState extends State<PassengerAccInfo> {
+class _DriverInformationState extends State<DriverInformation> {
   String valueChoose = "";
   List<String> listItem = ["Male", "Female"];
   File? _image;
@@ -181,7 +181,7 @@ class _PassengerAccInfoState extends State<PassengerAccInfo> {
                 width: 20,
                 height: 20,
                 decoration: const BoxDecoration(
-                  color: Colors.yellow,
+                  color: Color(0xFFFEB958),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -283,8 +283,7 @@ class _PassengerAccInfoState extends State<PassengerAccInfo> {
       onPressed: () {},
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
-        backgroundColor: Colors.yellow,
-        foregroundColor: Colors.black,
+        backgroundColor: const Color(0xFFFEB958),
         padding: const EdgeInsets.symmetric(horizontal: 30),
       ),
       child: const SizedBox(

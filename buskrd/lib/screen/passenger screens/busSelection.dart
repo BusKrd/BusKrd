@@ -1,4 +1,4 @@
-import 'package:buskrd/screen/payment.dart';
+import 'package:buskrd/screen/passenger%20screens/payment.dart';
 import 'package:flutter/material.dart';
 
 class BusSelection extends StatefulWidget {

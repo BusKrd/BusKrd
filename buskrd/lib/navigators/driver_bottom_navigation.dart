@@ -1,18 +1,19 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class BottomNavigation extends StatefulWidget {
-  final int selectedIndex;
+class DriverBottomNavigation extends StatefulWidget {
+   final int selectedIndex;
   final Function(int) onItemTapped;
-
-  const BottomNavigation({super.key, required this.selectedIndex, required this.onItemTapped});
+  const DriverBottomNavigation({super.key,required this.selectedIndex, required this.onItemTapped});
 
   @override
-  State<BottomNavigation> createState() => _BottomNavigationState();
+  State<DriverBottomNavigation> createState() => _DriverBottomNavigationState();
 }
 
-class _BottomNavigationState extends State<BottomNavigation> {
+class _DriverBottomNavigationState extends State<DriverBottomNavigation> {
   @override
   Widget build(BuildContext context) {
+    
     return BottomNavigationBar(
       currentIndex: widget.selectedIndex,
       onTap: widget.onItemTapped,
@@ -24,12 +25,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.route, color: Color.fromARGB(255, 0, 0, 0)), // Custom Route Icon
-          label: 'Route',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.book, color: Color.fromARGB(255, 0, 0, 0)), // Custom Reservation Icon
-          label: 'Reservation',
+          icon: Icon(Icons.calendar_month, color: Color.fromARGB(255, 0, 0, 0)), // Custom Reservation Icon
+          label: 'Time Table',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications_active, color: Color.fromARGB(255, 0, 0, 0)), // Custom Notification Icon
@@ -43,4 +40,3 @@ class _BottomNavigationState extends State<BottomNavigation> {
     );
   }
 }
-      

@@ -1,12 +1,12 @@
 
-import 'package:buskrd/screen/passenger_info.dart';
+import 'package:buskrd/screen/passenger%20screens/passenger_info.dart';
 
 
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
-import 'package:buskrd/screen/homepage.dart';
-import 'package:buskrd/screen/passenger_notification.dart';
-import 'package:buskrd/screen/reservation.dart';
-import 'package:buskrd/screen/route.dart';
+import 'package:buskrd/screen/passenger%20screens/homepage.dart';
+import 'package:buskrd/screen/passenger%20screens/passenger_notification.dart';
+import 'package:buskrd/screen/passenger%20screens/reservation.dart';
+import 'package:buskrd/screen/passenger%20screens/route.dart';
 import 'package:flutter/material.dart';
 
 class PassengerProfile extends StatefulWidget {
@@ -56,7 +56,15 @@ class _PassengerProfileState extends State<PassengerProfile> {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 30),
             alignment: Alignment.center,
-            color: Color.fromARGB(255, 33, 32, 70),
+            decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 156, 39, 176),
+                Color.fromARGB(255, 233, 30, 99),
+              ],
+            ),),
             child: const Column(
               children: [
                 Stack(

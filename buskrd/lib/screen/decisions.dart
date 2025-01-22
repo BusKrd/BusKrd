@@ -1,5 +1,5 @@
-import 'package:buskrd/screen/login.dart';
-import 'package:buskrd/screen/driver.dart';
+import 'package:buskrd/screen/passenger%20screens/login.dart';
+import 'package:buskrd/screen/Driver%20screens/invitation_driver.dart';
 //import 'package:buskrd/screen/homepage.dart';
 import 'package:flutter/material.dart';
 
@@ -72,7 +72,7 @@ class DecisionsScreen extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DriverScreen()));
+                              builder: (context) => InvitationDriver()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,

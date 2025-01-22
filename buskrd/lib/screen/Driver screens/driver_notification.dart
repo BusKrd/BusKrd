@@ -1,20 +1,21 @@
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
-import 'package:buskrd/screen/homepage.dart';
-import 'package:buskrd/screen/passenger_profile.dart';
-import 'package:buskrd/screen/reservation.dart';
-import 'package:buskrd/screen/route.dart';
+import 'package:buskrd/navigators/driver_bottom_navigation.dart';
+import 'package:buskrd/screen/Driver%20screens/driver_profile.dart';
+import 'package:buskrd/screen/Driver%20screens/homeDriver.dart';
+import 'package:buskrd/screen/Driver%20screens/time_table.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class PassengerNotification extends StatefulWidget {
-  const PassengerNotification({super.key});
-
+class DriverNotification extends StatefulWidget {
+  const DriverNotification({super.key});
 
   @override
-  State<PassengerNotification> createState() => _MyWidgetState();
+  State<DriverNotification> createState() => _DriverNotificationState();
 }
 
-class _MyWidgetState extends State<PassengerNotification> {
-  int _selectedIndex = 0;
+class _DriverNotificationState extends State<DriverNotification> {
+   int _selectedIndex = 0;
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -23,29 +24,16 @@ class _MyWidgetState extends State<PassengerNotification> {
 
     // Navigate to the Route screen when the second icon (index 1) is tapped
     if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeDriver(),),);
+     
     }
     else if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const RouteScreen()),
-      );
+     Navigator.push(context, MaterialPageRoute(builder: (context)=> TimeTable(),),);
     }
-    else if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SeatReservation()),
-      );
+    else if (index == 3) {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverProfile(),),);
     }
-    else if (index == 4) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const PassengerProfile()),
-      );
-    }
+    
   }
   @override
   Widget build(BuildContext context) {
@@ -56,24 +44,32 @@ class _MyWidgetState extends State<PassengerNotification> {
           Container(
             padding: EdgeInsets.symmetric(vertical: 30),
             alignment: Alignment.center,
-            color: Color.fromARGB(255, 33, 32, 70),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 40), // Padding specifically at the top
-                  child: Text(
-                    'Notification',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+            decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 156, 39, 176),
+                Color.fromARGB(255, 233, 30, 99),
               ],
             ),
           ),
-
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 40), // Padding specifically at the top
+                child: Text(
+                  'Notification',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+          ),
           // Bottom Section with ListTiles
           Padding(
             padding: const EdgeInsets.only(top: 130), // Ensure it doesn't overlap the title
@@ -96,7 +92,7 @@ class _MyWidgetState extends State<PassengerNotification> {
                         // Notification Container 1
                         Container(
                           height: 51,
-                          margin: EdgeInsets.only(bottom: 5),
+                          margin: EdgeInsets.only(bottom: 5), 
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: const Color.fromARGB(255, 213, 212, 212),
@@ -217,13 +213,13 @@ class _MyWidgetState extends State<PassengerNotification> {
                     right: 25,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context); // Example action: go back
+                         // Example action: go back
                       },
                       child: Container(
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          color: Colors.yellow,
+                          color:Color(0xFFFEB958),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -240,7 +236,7 @@ class _MyWidgetState extends State<PassengerNotification> {
           ),
         ],
       ),
-      bottomNavigationBar:BottomNavigation(
+      bottomNavigationBar:DriverBottomNavigation(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ), 

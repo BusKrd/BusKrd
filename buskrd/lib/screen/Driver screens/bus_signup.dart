@@ -1,7 +1,9 @@
+import 'package:buskrd/screen/Driver%20screens/signup_driver.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class BusInformation extends StatelessWidget {
-  const BusInformation({super.key});
+class BusSignup extends StatelessWidget {
+  const BusSignup({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,7 @@ class BusInformation extends StatelessWidget {
               const SizedBox(height: 20),
               Center(
                 child: SizedBox(
-                  width: 350,
-                  height: 350,
+                  width: 150,
                   child: Image.asset(
                     'assets/images/new_logo.png',
                     fit: BoxFit.contain,
@@ -88,7 +89,10 @@ class BusInformation extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const SignupDriver()));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 116, 11, 98),
                         foregroundColor: Colors.white,
