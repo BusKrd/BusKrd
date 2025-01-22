@@ -74,14 +74,12 @@ class _SignupDriverState extends State<SignupDriver> {
               const SizedBox(height: 0),
               _HeaderText(),
               const SizedBox(height: 25),
-              _extraText(),
-              const SizedBox(height: 25),
               _inputField("First name", firstnameController),
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
               _inputField("Last name", lastnameController),
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
               _inputField("Age", ageController),
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
               _genderDropdown(),
               const SizedBox(height: 10),
               _phoneNumberInput(),
@@ -136,27 +134,7 @@ class _SignupDriverState extends State<SignupDriver> {
     );
   }
 
-  Widget _extraText() {
-    return const Padding(
-      padding: EdgeInsets.only(left: 16.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            Icons.warning_amber_sharp,
-            color: Color.fromARGB(255, 255, 255, 255),
-            size: 15,
-          ),
-          SizedBox(width: 1),
-          Text(
-            "You must have an account in order to reserve a seat",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, color: Colors.white),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   Widget _inputField(String hintText, TextEditingController controller) {
     var border = OutlineInputBorder(

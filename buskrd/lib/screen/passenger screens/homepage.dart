@@ -110,78 +110,69 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
          actions: [
           IconButton(onPressed: () {
-            
-          Column(
-                children: [
-                  const SizedBox(
-                      height: 20), // Space between container top and title
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text(
-                      'Favorates',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black54,
+            setState(() {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Favorites'),
+                    content: SizedBox(
+                      height: 400, // Adjust the height as needed
+                      width: double.maxFinite,
+                      child: ListView.builder(
+                        itemCount: buses.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 5.0, horizontal: 20.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            elevation: 5,
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 20.0),
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Left side (Bus number and time interval)
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        buses[index]["Place"]!, // Bus name
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // Right side (Bus icon)
+                                  const Icon(
+                                    Icons.favorite, // Bus icon
+                                    color: Colors.red,
+                                    size: 30,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10), // Space after the title
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: buses.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 5.0, horizontal: 20.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          elevation: 5,
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Left side (Bus number and time interval)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      buses[index]["place"]!, // Bus name
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    
-                                  ],
-                                ),
-                                // Right side (Bus icon)
-                                const Icon(
-                                  Icons.favorite, // Bus icon
-                                  color: Colors.red,
-                                  size: 30,
-                                ),
-                              ],
-                            ),
-                            
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                    
+                  );
+                },
               );
-             
-            },
-            icon: const Icon(
-          Icons.favorite_border_sharp, // Heart icon (outline)
-          color: Colors.white,
-          size: 30,
-            ),
+            });
+          },
+          icon: const Icon(
+            Icons.favorite_border_sharp, // Heart icon (outline)
+            color: Colors.white,
+            size: 30,
+          ),
           ),
 
 
@@ -191,18 +182,16 @@ class _HomeScreenState extends State<HomeScreen> {
        ),
       ),
       backgroundColor: Colors.transparent,
-      body: Column(
-        children: [
-          Expanded(
-            flex: 8,
-            child: Container(
-              color: const Color.fromARGB(255, 255, 255, 255),
-              child: const Center(
-                child: Text('Bottom Half', style: TextStyle(fontSize: 24, color: Colors.white)),
-              ),
-            ),
+      body: Container(
+        color: const Color.fromARGB(255, 255, 255, 255),
+        child: const Center(
+          child: Image(
+        image: AssetImage('assets/images/map.png'),
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
           ),
-        ],
+        ),
       ),
       
       bottomNavigationBar:BottomNavigation(

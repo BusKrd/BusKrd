@@ -17,23 +17,23 @@ class _DriverBottomNavigationState extends State<DriverBottomNavigation> {
     return BottomNavigationBar(
       currentIndex: widget.selectedIndex,
       onTap: widget.onItemTapped,
-      selectedItemColor: Colors.blue, // Color for selected item
-      unselectedItemColor: Colors.grey,
+      selectedItemColor: Colors.red, // Color for selected item
+      unselectedItemColor: Colors.black,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_filled, color: Color.fromARGB(255, 0, 0, 0)), // Custom Home Icon
+          icon: Icon(Icons.home_filled, color: Color.fromARGB(255, 156, 39, 176)), // Custom Home Icon
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month, color: Color.fromARGB(255, 0, 0, 0)), // Custom Reservation Icon
+          icon: Icon(Icons.calendar_month, color: Color.fromARGB(255, 156, 39, 176)), // Custom Reservation Icon
           label: 'Time Table',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications_active, color: Color.fromARGB(255, 0, 0, 0)), // Custom Notification Icon
+          icon: Icon(Icons.notifications_active, color: Color.fromARGB(255, 156, 39, 176)), // Custom Notification Icon
           label: 'Notifications',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person, color: Color.fromARGB(255, 0, 0, 0)), // Custom Profile Icon
+          icon: Icon(Icons.person, color: Color.fromARGB(255, 156, 39, 176)), // Custom Profile Icon
           label: 'Profile',
         ),
       ],

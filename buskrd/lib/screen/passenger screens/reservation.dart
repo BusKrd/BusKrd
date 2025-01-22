@@ -63,7 +63,7 @@ class _SeatReservationState extends State<SeatReservation> {
         enabledBorder: border,
         focusedBorder: border,
       ),
-      dropdownColor: Colors.black,
+      dropdownColor: Color.fromARGB(255, 156, 39, 176),
       items: cities.map((String city) {
         return DropdownMenuItem<String>(
           value: city,

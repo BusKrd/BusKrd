@@ -77,11 +77,11 @@ class _SignupPageState extends State<Signup> {
               const SizedBox(height: 25),
               _extraText(),
               const SizedBox(height: 25),
-              _inputField("First name", firstnameController),
+              _inputField(Icons.person,"First name", firstnameController),
               const SizedBox(height: 5),
-              _inputField("Last name", lastnameController),
+              _inputField(Icons.person,"Last name", lastnameController),
               const SizedBox(height: 5),
-              _inputField("Age", ageController),
+              _inputField(Icons.person,"Age", ageController),
               const SizedBox(height: 5),
               _genderDropdown(),
               const SizedBox(height: 10),
@@ -102,29 +102,37 @@ class _SignupPageState extends State<Signup> {
         border: Border.all(color: Colors.white),
         borderRadius: BorderRadius.circular(18),
       ),
-      child: DropdownButton<String>(
-        value: valueChoose.isNotEmpty && listItem.contains(valueChoose)
-            ? valueChoose
-            : null,
-        icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-        dropdownColor: const Color.fromARGB(255, 33, 32, 70),
-        style: const TextStyle(color: Colors.white),
-        hint: const Text(
-          "Select Gender",
-          style: TextStyle(color: Colors.white),
-        ),
-        underline: const SizedBox(),
-        isExpanded: true,
-        items: listItem.map((String value) {
-          return DropdownMenuItem<String>(value: value, child: Text(value));
-        }).toList(),
-        onChanged: (String? newValue) {
-          if (newValue != null) {
-            setState(() {
-              valueChoose = newValue;
-            });
-          }
-        },
+      child: Row(
+        children: [
+          const Icon(Icons.man_outlined, color: Colors.white),
+          const SizedBox(width: 8),
+          Expanded(
+            child: DropdownButton<String>(
+              value: valueChoose.isNotEmpty && listItem.contains(valueChoose)
+                  ? valueChoose
+                  : null,
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+              dropdownColor: Color.fromARGB(255, 156, 39, 176),
+              style: const TextStyle(color: Colors.white),
+              hint: const Text(
+                "Select Gender",
+                style: TextStyle(color: Colors.white),
+              ),
+              underline: const SizedBox(),
+              isExpanded: true,
+              items: listItem.map((String value) {
+                return DropdownMenuItem<String>(value: value, child: Text(value));
+              }).toList(),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    valueChoose = newValue;
+                  });
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -159,7 +167,7 @@ class _SignupPageState extends State<Signup> {
     );
   }
 
-  Widget _inputField(String hintText, TextEditingController controller) {
+  Widget _inputField(IconData icon, hintText, TextEditingController controller) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
       borderSide: const BorderSide(color: Colors.white),
@@ -169,6 +177,7 @@ class _SignupPageState extends State<Signup> {
       style: const TextStyle(color: Colors.white),
       controller: controller,
       decoration: InputDecoration(
+        prefixIcon: Icon(icon, color: Colors.white),
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.white),
         enabledBorder: border,
@@ -235,8 +244,6 @@ class _SignupPageState extends State<Signup> {
               context,
               MaterialPageRoute(
                 builder: (context) => VerificationCodeScreen(
-                  phoneNumber: phoneNumber!.phoneNumber!,
-                  phoneNumberAuth: phoneNumberAuth,
                 ),
               ),
             );

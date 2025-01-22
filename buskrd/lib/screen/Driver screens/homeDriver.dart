@@ -83,17 +83,6 @@ class _HomeDriverState extends State<HomeDriver> {
             ),
           ),
           SizedBox(width: 16), // Add some space between the search bar and the icon button
-          IconButton(
-            onPressed: () {
-              // Open a list when the favorite button is pressed
-             
-            },
-            icon: const Icon(
-          Icons.favorite_border_sharp, // Heart icon (outline)
-          color: Colors.white,
-          size: 30,
-            ),
-          ),
         ],
           ),
         ),

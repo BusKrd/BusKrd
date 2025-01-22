@@ -32,14 +32,12 @@ class _RouteScreenState extends State<RouteScreen> {
         context,
         MaterialPageRoute(builder: (context) => const SeatReservation()),
       );
-    }
-    else if (index == 3) {
+    } else if (index == 3) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const PassengerNotification()),
       );
-    }
-    else if (index == 3) {
+    } else if (index == 3) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const PassengerProfile()),
@@ -57,13 +55,13 @@ class _RouteScreenState extends State<RouteScreen> {
             height: 200, // Adjust the height for the top section
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 156, 39, 176),
-                Color.fromARGB(255, 233, 30, 99),
-              ],
-            ),
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.fromARGB(255, 156, 39, 176),
+                  Color.fromARGB(255, 233, 30, 99),
+                ],
+              ),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(30),
                 bottomRight: Radius.circular(30),
@@ -105,11 +103,13 @@ class _RouteScreenState extends State<RouteScreen> {
           // Bottom half of the screen with rounded edges
           Expanded(
             child: Container(
-              color: Colors.white,
+              color: const Color.fromARGB(255, 255, 255, 255),
               child: const Center(
-                child: Text(
-                  'Route Content Here',
-                  style: TextStyle(fontSize: 24, color: Colors.black),
+                child: Image(
+                  image: AssetImage('assets/images/rout.png'),
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
                 ),
               ),
             ),
