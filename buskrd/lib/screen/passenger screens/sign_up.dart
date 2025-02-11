@@ -18,31 +18,17 @@ class _SignupPageState extends State<Signup> {
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController ageController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
 
   PhoneNumber? phoneNumber;
 
-  final PhoneNumberAuth phoneNumberAuth =
-      PhoneNumberAuth(FirebaseAuth.instance);
+  final PhoneNumberAuth phoneNumberAuth = PhoneNumberAuth(FirebaseAuth.instance);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 156, 39, 176),
-              Color.fromARGB(255, 233, 30, 99),
-            ],
-          ),
-        ),
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
-       
         iconTheme: const IconThemeData(color: Colors.white),
-     backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       backgroundColor: Colors.transparent,
@@ -59,9 +45,7 @@ class _SignupPageState extends State<Signup> {
         ),
         child: _page(),
       ),
-        ),
-      );
-    
+    );
   }
 
   Widget _page() {
@@ -77,11 +61,11 @@ class _SignupPageState extends State<Signup> {
               const SizedBox(height: 25),
               _extraText(),
               const SizedBox(height: 25),
-              _inputField(Icons.person,"First name", firstnameController),
+              _inputField(Icons.person, "First name", firstnameController),
               const SizedBox(height: 5),
-              _inputField(Icons.person,"Last name", lastnameController),
+              _inputField(Icons.person, "Last name", lastnameController),
               const SizedBox(height: 5),
-              _inputField(Icons.person,"Age", ageController),
+              _inputField(Icons.person, "Age", ageController),
               const SizedBox(height: 5),
               _genderDropdown(),
               const SizedBox(height: 10),
@@ -204,7 +188,6 @@ class _SignupPageState extends State<Signup> {
             onInputValidated: (bool value) {
               print(value ? 'Valid phone number' : 'Invalid phone number');
             },
-            
             selectorConfig: const SelectorConfig(
               selectorType: PhoneInputSelectorType.DIALOG,
             ),
@@ -212,7 +195,6 @@ class _SignupPageState extends State<Signup> {
             autoValidateMode: AutovalidateMode.onUserInteraction,
             selectorTextStyle: const TextStyle(color: Colors.white),
             textStyle: const TextStyle(color: Colors.white),
-            
             initialValue: PhoneNumber(isoCode: 'IQ'),
             keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
             inputDecoration: const InputDecoration(
@@ -235,18 +217,7 @@ class _SignupPageState extends State<Signup> {
           String phoneNumberWithoutCode = phoneNumber!.phoneNumber!.replaceAll(countryCode, '');
 
           try {
-            await phoneNumberAuth.phoneAuth(
-              context,
-              countryCode,
-              phoneNumberWithoutCode,
-            );
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => VerificationCodeScreen(
-                ),
-              ),
-            );
+            await phoneNumberAuth.phoneAuth(countryCode, phoneNumberWithoutCode);
           } catch (e) {
             Get.snackbar("Error", "Failed to send OTP: ${e.toString()}");
           }

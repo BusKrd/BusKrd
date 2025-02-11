@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:buskrd/authentication.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
   const VerificationCodeScreen({super.key});
@@ -9,6 +12,8 @@ class VerificationCodeScreen extends StatefulWidget {
 }
 
 class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
+  final PhoneNumberAuth phoneNumberAuth = PhoneNumberAuth(FirebaseAuth.instance);
+
   TextEditingController codeController1 = TextEditingController();
   TextEditingController codeController2 = TextEditingController();
   TextEditingController codeController3 = TextEditingController();
@@ -23,22 +28,25 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   FocusNode focusNode5 = FocusNode();
   FocusNode focusNode6 = FocusNode();
 
+  Future<void> _verifyOTP() async {
+    String otp = codeController1.text +
+        codeController2.text +
+        codeController3.text +
+        codeController4.text +
+        codeController5.text +
+        codeController6.text;
+
+    bool isVerified = await phoneNumberAuth.verifyOTP(otp);
+    if (isVerified) {
+      Get.offAllNamed('/home'); // Navigate to home after successful verification
+    } else {
+      Get.snackbar("Error", "Invalid OTP. Please try again.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 156, 39, 176),
-              Color.fromARGB(255, 233, 30, 99),
-            ],
-          ),
-        ),
-
-    
-    child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -92,19 +100,21 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
               ),
               const SizedBox(height: 50),
               _resendButton(),
-              // const SizedBox(height: 20),
-              // _submitButton(),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _verifyOTP,
+                child: const Text("Submit"),
+              ),
             ],
           ),
         ),
       ),
-    ),);
+    );
   }
 
-  Widget _buildCodeBox(TextEditingController controller, FocusNode focusNode,
-      FocusNode? nextFocusNode) {
+  Widget _buildCodeBox(TextEditingController controller, FocusNode focusNode, FocusNode? nextFocusNode) {
     return SizedBox(
-      width: 40, // Reduced width
+      width: 40,
       child: TextField(
         controller: controller,
         focusNode: focusNode,
@@ -132,11 +142,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
             FocusScope.of(context).requestFocus(nextFocusNode);
           }
         },
-        onSubmitted: (value) {
-          if (nextFocusNode != null) {
-            FocusScope.of(context).requestFocus(nextFocusNode);
-          }
-        },
       ),
     );
   }
@@ -145,7 +150,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
     return TextButton(
       onPressed: () {
         print("Resend code requested");
-        Navigator.pushNamed(context, '/driver');
+        // Add logic to resend OTP
       },
       child: RichText(
         text: const TextSpan(
