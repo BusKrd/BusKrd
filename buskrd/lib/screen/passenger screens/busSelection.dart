@@ -1,4 +1,5 @@
 import 'package:buskrd/screen/passenger%20screens/payment.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class BusSelection extends StatefulWidget {
@@ -13,17 +14,32 @@ class BusSelection extends StatefulWidget {
 class _BusSelectionState extends State<BusSelection> {
   final TextEditingController fromController = TextEditingController();
   final TextEditingController toController = TextEditingController();
-  final List<String> cities = [
-    'Sulaymaniah',
-    'Hawler',
-    'Duhok',
-    'Zaxo',
-    'Kirkuk',
-    'Penjwen',
-    'Halabja',
-    'Bazian',
-    'Piramagrun'
-  ];
+  List<String> cities = []; // Will store fetched city names
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCities(); // Fetch cities when the screen loads
+  }
+
+  // Function to fetch city names from Firestore
+ void fetchCities() async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  try {
+    DocumentSnapshot doc = await firestore.collection("cities").doc("kurdistan").get();
+
+    if (doc.exists) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      setState(() {
+        cities = List<String>.from(data["city"] ?? []); // Convert Firestore array to List<String> safely
+      });
+    } else {
+      print("Document does not exist");
+    }
+  } catch (e) {
+    print("Error fetching cities: $e");
+  }
+}
 
   // List of bus options with time intervals
   final List<Map<String, String>> buses = [

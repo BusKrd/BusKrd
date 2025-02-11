@@ -30,14 +30,14 @@ class _RouteScreenState extends State<RouteScreen> {
     if (index == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const SeatReservation()),
+        MaterialPageRoute(builder: (context) =>  SeatReservation()),
       );
     } else if (index == 3) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const PassengerNotification()),
       );
-    } else if (index == 3) {
+    } else if (index == 4) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const PassengerProfile()),

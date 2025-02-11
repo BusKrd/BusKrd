@@ -37,7 +37,7 @@ class _MyWidgetState extends State<PassengerNotification> {
     else if (index == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const SeatReservation()),
+        MaterialPageRoute(builder: (context) =>  SeatReservation()),
       );
     }
     else if (index == 4) {

@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     else if (index == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const SeatReservation()),
+        MaterialPageRoute(builder: (context) =>  SeatReservation()),
       );
     }
     else if (index == 3) {
