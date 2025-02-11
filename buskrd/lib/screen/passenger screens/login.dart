@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:buskrd/authentication.dart';
+import 'package:get/get.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -14,34 +15,35 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   PhoneNumber? phoneNumber;
+  final PhoneNumberAuth phoneNumberAuth = PhoneNumberAuth(FirebaseAuth.instance);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 156, 39, 176),
-              Color.fromARGB(255, 233, 30, 99),
-            ],
-          ),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromARGB(255, 156, 39, 176),
+            Color.fromARGB(255, 233, 30, 99),
+          ],
         ),
-    child: Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      backgroundColor: Colors.transparent,
-      body: Padding(
+        body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
             child: Column(
@@ -71,7 +73,6 @@ class _AccountPageState extends State<AccountPage> {
                         onInputValidated: (bool value) {
                           print(value ? 'Valid phone number' : 'Invalid phone number');
                         },
-                        
                         initialValue: PhoneNumber(isoCode: 'IQ'),
                         inputDecoration: const InputDecoration(
                           hintText: 'Phone number',
@@ -96,60 +97,66 @@ class _AccountPageState extends State<AccountPage> {
                 // Login Button
                 SizedBox(
                   width: 150,
-                  child: 
-                
-                ElevatedButton(
-                  onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                    builder: (context) => const HomeScreen()));
-                  // Add login logic here
-                  },
-                  style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15), // Text color
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (phoneNumber != null && phoneNumber!.phoneNumber != null) {
+                        String countryCode = phoneNumber!.dialCode ?? '';
+                        String phoneNumberWithoutCode = phoneNumber!.phoneNumber!.replaceAll(countryCode, '');
+
+                        try {
+                          await phoneNumberAuth.phoneAuth(countryCode, phoneNumberWithoutCode);
+                        } catch (e) {
+                          Get.snackbar("Error", "Failed to send OTP: ${e.toString()}");
+                        }
+                      } else {
+                        Get.snackbar("Error", "Please enter a valid phone number");
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15), // Text color
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
                   ),
-                  child: const Text(
-                  'Login',
-                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
-                  ),
-                )),
+                ),
                 const SizedBox(height: 20),
 
                 // Divider and Sign-Up Suggestion
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Don't have an account?",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Don't have an account?",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Signup(),
                           ),
+                        );
+                      },
+                      child: const Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2,
                         ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Signup(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Sign Up',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.white,
-                              decorationThickness: 2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),

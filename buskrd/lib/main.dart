@@ -49,14 +49,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      initialRoute: '/', // Set initial route
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/signup': (context) => const Signup(),
-     
-        
-      },
+      home: const SplashScreen(),
     );
   }
 }
