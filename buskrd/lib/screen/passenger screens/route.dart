@@ -1,3 +1,4 @@
+import 'package:buskrd/map_page.dart';
 import 'package:buskrd/screen/passenger%20screens/passenger_notification.dart';
 import 'package:buskrd/screen/passenger%20screens/passenger_profile.dart';
 import 'package:flutter/material.dart';
@@ -102,17 +103,9 @@ class _RouteScreenState extends State<RouteScreen> {
           ),
           // Bottom half of the screen with rounded edges
           Expanded(
-            child: Container(
-              color: const Color.fromARGB(255, 255, 255, 255),
-              child: const Center(
-                child: Image(
-                  image: AssetImage('assets/images/rout.png'),
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-              ),
-            ),
+            child:
+              MapPage(),
+            
           ),
         ],
       ),

@@ -5,6 +5,8 @@ import 'package:buskrd/screen/passenger%20screens/reservation.dart';
 import 'package:buskrd/screen/passenger%20screens/route.dart';
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
 import 'package:flutter/rendering.dart';
+import 'package:buskrd/map_page.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -181,19 +183,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
        ),
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
       body: Container(
         color: const Color.fromARGB(255, 255, 255, 255),
         child: const Center(
-          child: Image(
-        image: AssetImage('assets/images/map.png'),
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-          ),
+          child: MapPage(),
         ),
       ),
-      
+     
       bottomNavigationBar:BottomNavigation(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
@@ -201,4 +198,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     
   }
+   
 }

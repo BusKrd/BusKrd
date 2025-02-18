@@ -1,4 +1,5 @@
 
+import 'package:buskrd/screen/passenger%20screens/homepage.dart';
 import 'package:buskrd/screen/passenger%20screens/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -98,19 +99,8 @@ class _AccountPageState extends State<AccountPage> {
                 SizedBox(
                   width: 150,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      if (phoneNumber != null && phoneNumber!.phoneNumber != null) {
-                        String countryCode = phoneNumber!.dialCode ?? '';
-                        String phoneNumberWithoutCode = phoneNumber!.phoneNumber!.replaceAll(countryCode, '');
-
-                        try {
-                          await phoneNumberAuth.phoneAuth(countryCode, phoneNumberWithoutCode);
-                        } catch (e) {
-                          Get.snackbar("Error", "Failed to send OTP: ${e.toString()}");
-                        }
-                      } else {
-                        Get.snackbar("Error", "Please enter a valid phone number");
-                      }
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,

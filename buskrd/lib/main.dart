@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart'; // Import foundation.dart for kIsAndroid and kIsIOS
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart'; // Import firebase_core
-import 'package:buskrd/screen/passenger%20screens/busSelection.dart';
 import 'package:buskrd/screen/splash_screens.dart';
-import 'package:buskrd/screen/passenger%20screens/sign_up.dart';
-import 'package:buskrd/screen/passenger%20screens/homepage.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
