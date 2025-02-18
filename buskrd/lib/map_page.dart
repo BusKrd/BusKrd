@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -14,10 +14,9 @@ class _MapPageState extends State<MapPage> {
   LatLng mycurrentLoc = const LatLng(20.5937, 78.9629); // Default: India
   late GoogleMapController googleMapController;
   bool isLoading = true; // To show loading before fetching location
-  String googleMapsApiKey='AIzaSyB13fMIAxQnhW5TVWrah0KsZnI1yeJqoQI';
+  
   static const kaziwa= LatLng(35.5548, 45.4890);
   static const bazar= LatLng(35.55687498181495, 45.44398410702944);
-  
 
   @override
   void initState() {
@@ -53,12 +52,10 @@ class _MapPageState extends State<MapPage> {
             Marker(markerId: MarkerId('kaziwa'),
             icon: BitmapDescriptor.defaultMarker,
             position: kaziwa),
-
             Marker(markerId: MarkerId('bazar'),
             icon: BitmapDescriptor.defaultMarker,
             position: bazar),
           },
-        
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
