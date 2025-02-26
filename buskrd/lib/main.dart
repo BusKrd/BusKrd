@@ -2,9 +2,11 @@ import 'package:flutter/foundation.dart'; // Import foundation.dart for kIsAndro
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart'; // Import firebase_core
 import 'package:buskrd/screen/splash_screens.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 Future<void> main() async {
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   const FirebaseOptions androidOptions = FirebaseOptions(
     apiKey: "AIzaSyA1r8F1cnW9ZDIf3iRBnmGfxrwZhu7DqFc",
