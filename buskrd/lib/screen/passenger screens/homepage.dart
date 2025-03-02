@@ -1,5 +1,6 @@
 import 'package:buskrd/screen/passenger%20screens/passenger_notification.dart';
 import 'package:buskrd/screen/passenger%20screens/passenger_profile.dart';
+import 'package:buskrd/show_map.dart';
 import 'package:flutter/material.dart';
 import 'package:buskrd/screen/passenger%20screens/reservation.dart';
 import 'package:buskrd/screen/passenger%20screens/route.dart';
@@ -182,17 +183,9 @@ class _HomeScreenState extends State<HomeScreen> {
        ),
       ),
       backgroundColor: Colors.transparent,
-      body: Container(
-        color: const Color.fromARGB(255, 255, 255, 255),
-        child: const Center(
-          child: Image(
-        image: AssetImage('assets/images/map.png'),
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-          ),
-        ),
-      ),
+      body: 
+        MapPageHome(),
+      
       
       bottomNavigationBar:BottomNavigation(
         selectedIndex: _selectedIndex,
