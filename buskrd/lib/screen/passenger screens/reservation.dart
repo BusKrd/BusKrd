@@ -156,6 +156,7 @@ void _onItemTapped(int index) {
                           builder: (context) => BusSelection(
                             city1: fromController.text,
                             city2: toController.text,
+                            date: dateController.text,
                           ),
                         ),
                       );

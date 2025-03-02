@@ -5,7 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class MapPageHome extends StatefulWidget {
-  const MapPageHome({super.key});
+   final LatLng? searchedLocation;
+  const MapPageHome({super.key, this.searchedLocation});
 
   @override
   State<MapPageHome> createState() => _MapPageHomeState();
@@ -23,7 +24,16 @@ class _MapPageHomeState extends State<MapPageHome> {
   }
 
   void _initializeMap() async {
-    await _getInitialLocation(); // Get current location
+    await _getInitialLocation();
+    if (widget.searchedLocation != null) {
+      _goToSearchedLocation(widget.searchedLocation!);
+    } // Get current location
+  }
+
+  void _goToSearchedLocation(LatLng location) {
+    googleMapController.animateCamera(
+      CameraUpdate.newLatLng(location),
+    );
   }
 
   Future<void> _getInitialLocation() async {

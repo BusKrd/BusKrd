@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 class BusSelection extends StatefulWidget {
   final String city1;
   final String city2;
-  BusSelection({super.key, required this.city1, required this.city2});
+  final String date;
+  BusSelection(
+      {super.key,
+      required this.city1,
+      required this.city2,
+      required this.date});
 
   @override
   _BusSelectionState createState() => _BusSelectionState();
@@ -15,41 +20,63 @@ class _BusSelectionState extends State<BusSelection> {
   final TextEditingController fromController = TextEditingController();
   final TextEditingController toController = TextEditingController();
   List<String> cities = []; // Will store fetched city names
+    List<Map<String, String>> buses = []; 
 
   @override
   void initState() {
     super.initState();
-    fetchCities(); // Fetch cities when the screen loads
+    fetchCities();
+    fetchBuses(); // Fetch cities when the screen loads
   }
 
   // Function to fetch city names from Firestore
- void fetchCities() async {
+  void fetchCities() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      DocumentSnapshot doc =
+          await firestore.collection("cities").doc("kurdistan").get();
+
+      if (doc.exists) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        setState(() {
+          cities = List<String>.from(data["city"] ??
+              []); // Convert Firestore array to List<String> safely
+        });
+      } else {
+        print("Document does not exist");
+      }
+    } catch (e) {
+      print("Error fetching cities: $e");
+    }
+  }
+
+  void fetchBuses() async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   try {
-    DocumentSnapshot doc = await firestore.collection("cities").doc("kurdistan").get();
+    QuerySnapshot querySnapshot = await firestore
+        .collection("BusER")
+        .where("source", isEqualTo: widget.city1) // Match starting city
+        .where("destination", isEqualTo: widget.city2) // Match destination city
+        .where("date", isEqualTo: widget.date)   // Match selected date
+        .get();
 
-    if (doc.exists) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      setState(() {
-        cities = List<String>.from(data["city"] ?? []); // Convert Firestore array to List<String> safely
-      });
-    } else {
-      print("Document does not exist");
-    }
+    setState(() {
+      buses = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return {
+          "bus": data["BusNum"].toString(), // Bus name
+          "time": data["time"].toString(),   // Time interval
+          "route": data["route"].toString(), // Route
+        };
+      }).toList();
+    });
   } catch (e) {
-    print("Error fetching cities: $e");
+    print("Error fetching buses: $e");
   }
 }
 
   // List of bus options with time intervals
-  final List<Map<String, String>> buses = [
-    {"bus": "Bus A", "time": "10:00 - 12:00", "route": "Kirkuk"},
-    {"bus": "Bus B", "time": "12:00 - 14:00", "route": "Dukan"},
-    {"bus": "Bus C", "time": "14:00 - 16:00", "route": "Kani shaitan"},
-    {"bus": "Bus D", "time": "16:00 - 18:00", "route": "Kirkuk"},
-    {"bus": "Bus E", "time": "18:00 - 20:00", "route": "Dukan"},
-    {"bus": "Bus F", "time": "20:00 - 22:00", "route": "Dukan"},
-  ];
+
 
   // Input Field Widget
   Widget _dropdownField(String hintText, TextEditingController controller) {
@@ -95,22 +122,21 @@ class _BusSelectionState extends State<BusSelection> {
             ),
           ),
           child: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
             title: const Text(
               'Bus selection',
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
-        iconTheme: const IconThemeData(
-          color: Colors.white, // Set the back arrow color to white
-        ),
-      ),
+            iconTheme: const IconThemeData(
+              color: Colors.white, // Set the back arrow color to white
+            ),
+          ),
         ),
       ),
       backgroundColor: Colors.transparent,
-    
       body: Column(
         children: [
           // Top Half with rounded bottom corners (now filling horizontally)
@@ -118,7 +144,7 @@ class _BusSelectionState extends State<BusSelection> {
             width: double.infinity, // Make it fill horizontally
             height: 172, // Adjust height as needed
             decoration: const BoxDecoration(
-             gradient: LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
@@ -152,7 +178,6 @@ class _BusSelectionState extends State<BusSelection> {
             child: Container(
               decoration: const BoxDecoration(
                 color: Colors.white,
-                
               ),
               child: Column(
                 children: [
@@ -171,79 +196,77 @@ class _BusSelectionState extends State<BusSelection> {
                   ),
                   const SizedBox(height: 10), // Space after the title
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: buses.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 5.0, horizontal: 20.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          elevation: 5,
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Left side (Bus number and time interval)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      buses[index]["bus"]!, // Bus name
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      buses[index]["time"]!, // Time interval
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      buses[index]["route"]!, // Time interval
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                // Right side (Bus icon)
-                                const Icon(
-                                  Icons.directions_bus, // Bus icon
-                                  color: Color.fromARGB(255, 33, 32, 70),
-                                  size: 30,
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              // Handle bus selection (for now it just prints)
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Payment(
-                                          bus: buses[index]["bus"]!,
-                                          time: buses[index]["time"]!,
-                                          route: buses[index]["route"]!,
-                                          city1: widget.city1,
-                                          city2: widget.city2)));
-                            },
-                          ),
-                        );
-                      },
+  child: ListView.builder(
+    itemCount: buses.length,
+    itemBuilder: (context, index) {
+      return Card(
+        margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        elevation: 5,
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    buses[index]["bus"]!, // Bus name
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
                     ),
                   ),
+                  const SizedBox(height: 5),
+                  Text(
+                    buses[index]["time"]!, // Time interval
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    buses[index]["route"]!, // Route
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+              const Icon(
+                Icons.directions_bus,
+                color: Color.fromARGB(255, 33, 32, 70),
+                size: 30,
+              ),
+            ],
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Payment(
+                  bus: buses[index]["bus"]!,
+                  time: buses[index]["time"]!,
+                  route: buses[index]["route"]!,
+                  city1: widget.city1,
+                  city2: widget.city2,
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    },
+  ),
+),
                 ],
               ),
             ),

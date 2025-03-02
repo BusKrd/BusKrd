@@ -6,6 +6,8 @@ import 'package:buskrd/screen/passenger%20screens/reservation.dart';
 import 'package:buskrd/screen/passenger%20screens/route.dart';
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
 import 'package:flutter/rendering.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart'; 
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +19,24 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final TextEditingController _searchController = TextEditingController();
+  LatLng? _searchedLocation;
+
+
+  void _searchLocation() async {
+    String locationName = _searchController.text;
+    if (locationName.isEmpty) return;
+
+    try {
+      List<Location> locations = await locationFromAddress(locationName);
+      if (locations.isNotEmpty) {
+        setState(() {
+          _searchedLocation = LatLng(locations.first.latitude, locations.first.longitude);
+        });
+      }
+    } catch (e) {
+      debugPrint("Error geocoding location: $e");
+    }
+  }
 
   final List<Map<String, String>> buses = [
     {"Place":"Place 1"},
@@ -99,8 +119,10 @@ class _HomeScreenState extends State<HomeScreen> {
               hintText: 'Search...',
               border: InputBorder.none,
               hintStyle: TextStyle(color: Colors.black54),
+              suffixIcon: Icon(Icons.search),
             ),
             style: const TextStyle(color: Colors.black),
+            onSubmitted: (value) => _searchLocation(), 
           ),
             ),
           ),
@@ -184,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       backgroundColor: Colors.transparent,
       body: 
-        MapPageHome(),
+        MapPageHome(searchedLocation: _searchedLocation),
       
       
       bottomNavigationBar:BottomNavigation(
