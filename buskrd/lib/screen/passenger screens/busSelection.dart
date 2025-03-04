@@ -57,7 +57,7 @@ class _BusSelectionState extends State<BusSelection> {
         .collection("BusER")
         .where("source", isEqualTo: widget.city1) // Match starting city
         .where("destination", isEqualTo: widget.city2) // Match destination city
-        .where("date", isEqualTo: widget.date)   // Match selected date
+       // .where("date", isEqualTo: widget.date)   // Match selected date
         .get();
 
     setState(() {
