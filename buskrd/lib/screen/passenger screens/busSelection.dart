@@ -1,6 +1,7 @@
 import 'package:buskrd/screen/passenger%20screens/payment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BusSelection extends StatefulWidget {
   final String city1;
@@ -20,7 +21,7 @@ class _BusSelectionState extends State<BusSelection> {
   final TextEditingController fromController = TextEditingController();
   final TextEditingController toController = TextEditingController();
   List<String> cities = []; // Will store fetched city names
-    List<Map<String, String>> buses = []; 
+  List<Map<String, String>> buses = [];
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _BusSelectionState extends State<BusSelection> {
     fetchCities();
     fetchBuses(); // Fetch cities when the screen loads
   }
+
 
   // Function to fetch city names from Firestore
   void fetchCities() async {
@@ -51,31 +53,58 @@ class _BusSelectionState extends State<BusSelection> {
   }
 
   void fetchBuses() async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  try {
-    QuerySnapshot querySnapshot = await firestore
-        .collection("BusER")
-        .where("source", isEqualTo: widget.city1) // Match starting city
-        .where("destination", isEqualTo: widget.city2) // Match destination city
-       // .where("date", isEqualTo: widget.date)   // Match selected date
-        .get();
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    String docName = "";
 
-    setState(() {
-      buses = querySnapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return {
-          "bus": data["BusNum"].toString(), // Bus name
-          "time": data["time"].toString(),   // Time interval
-          "route": data["route"].toString(), // Route
-        };
-      }).toList();
-    });
-  } catch (e) {
-    print("Error fetching buses: $e");
+    // Determine the correct document
+    if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Erbil") {
+      docName = "SuliToEr";
+    } else if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Kirkuk") {
+      docName = "SuliToKr";
+    } else {
+      print("No valid route found for ${widget.city1} to ${widget.city2}");
+      return;
+    }
+
+    try {
+    print("Selected date: ${widget.date}");
+
+
+      QuerySnapshot querySnapshot = await firestore
+          .collection("Bus")
+          .doc(docName)
+          .collection("Buses")
+          .where("date", isEqualTo: widget.date) // Match selected date
+          .get();
+
+         print("Selected Cities: ${widget.city1} to ${widget.city2}");
+print("Document Name: $docName");
+        
+        print("🔹 Query executed: ${querySnapshot.size} buses found.");
+        
+
+      if (querySnapshot.docs.isEmpty) {
+        print("No buses found for ${widget.city1} to ${widget.city2}");
+      }
+
+    
+      
+
+      setState(() {
+        buses = querySnapshot.docs.map((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          return {
+            "bus": data["BusNum"].toString(), // Bus name
+            "time": data["time"].toString(), // Time interval
+            "route": data["route"].toString(), // Route
+          };
+        }).toList();
+        
+      });
+    } catch (e) {
+      print("Error fetching buses: $e");
+    }
   }
-}
-
-  // List of bus options with time intervals
 
 
   // Input Field Widget
@@ -196,77 +225,79 @@ class _BusSelectionState extends State<BusSelection> {
                   ),
                   const SizedBox(height: 10), // Space after the title
                   Expanded(
-  child: ListView.builder(
-    itemCount: buses.length,
-    itemBuilder: (context, index) {
-      return Card(
-        margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        elevation: 5,
-        child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    buses[index]["bus"]!, // Bus name
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+                    child: ListView.builder(
+                      itemCount: buses.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 5.0, horizontal: 20.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          elevation: 5,
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      buses[index]["bus"]!, // Bus name
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      buses[index]["time"]!, // Time interval
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      buses[index]["route"]!, // Route
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Icon(
+                                  Icons.directions_bus,
+                                  color: Color.fromARGB(255, 33, 32, 70),
+                                  size: 30,
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Payment(
+                                    bus: buses[index]["bus"]!,
+                                    time: buses[index]["time"]!,
+                                    route: buses[index]["route"]!,
+                                    city1: widget.city1,
+                                    city2: widget.city2,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    buses[index]["time"]!, // Time interval
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    buses[index]["route"]!, // Route
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ],
-              ),
-              const Icon(
-                Icons.directions_bus,
-                color: Color.fromARGB(255, 33, 32, 70),
-                size: 30,
-              ),
-            ],
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Payment(
-                  bus: buses[index]["bus"]!,
-                  time: buses[index]["time"]!,
-                  route: buses[index]["route"]!,
-                  city1: widget.city1,
-                  city2: widget.city2,
-                ),
-              ),
-            );
-          },
-        ),
-      );
-    },
-  ),
-),
                 ],
               ),
             ),
