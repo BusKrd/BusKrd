@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Payment extends StatefulWidget {
@@ -19,6 +20,57 @@ class Payment extends StatefulWidget {
 }
 
 class _PaymentState extends State<Payment> {
+
+   void incSeat() async {
+  try {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Identify the correct document for the bus route
+    String docName = "";
+    if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Erbil") {
+      docName = "SuliToEr";
+    } else if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Kirkuk") {
+      docName = "SuliToKr";
+    } else {
+      print("❌ No valid route found for ${widget.city1} to ${widget.city2}");
+      return;
+    }
+
+    // Query the bus collection for the correct bus document
+    QuerySnapshot querySnapshot = await firestore
+        .collection("Bus")
+        .doc(docName)
+        .collection("Buses")
+        .where("BusNum", isEqualTo: widget.bus) // Filter buses by BusNum
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // Get the first matching document
+      DocumentSnapshot busDoc = querySnapshot.docs.first;
+      String busDocId = busDoc.id; // The actual document ID
+
+      print("✅ Found bus document ID: $busDocId");
+
+      int availableSeats = busDoc["AvailableSeats"] ?? 0;
+
+      // Update the available seats
+      await firestore
+          .collection("Bus")
+          .doc(docName)
+          .collection("Buses")
+          .doc(busDocId) // Use the found document ID
+          .update({
+        "AvailableSeats": availableSeats + 1,
+      });
+
+      print("Available seats updated successfully.");
+    } else {
+      print("No matching bus found for BusNum: ${widget.bus}");
+    }
+  } catch (e) {
+    print("🔥 Error updating available seats: $e");
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,6 +179,8 @@ class _PaymentState extends State<Payment> {
                     width: 200, // Set a fixed width for both buttons
                     child: ElevatedButton(
                       onPressed: () {
+                        
+                        incSeat();
                         // Handle FIB payment method
                         print('Selected FIB');
                       },

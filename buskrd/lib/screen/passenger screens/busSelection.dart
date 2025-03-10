@@ -30,7 +30,6 @@ class _BusSelectionState extends State<BusSelection> {
     fetchBuses(); // Fetch cities when the screen loads
   }
 
-
   // Function to fetch city names from Firestore
   void fetchCities() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -67,8 +66,7 @@ class _BusSelectionState extends State<BusSelection> {
     }
 
     try {
-    print("Selected date: ${widget.date}");
-
+      print("Selected date: ${widget.date}");
 
       QuerySnapshot querySnapshot = await firestore
           .collection("Bus")
@@ -77,18 +75,14 @@ class _BusSelectionState extends State<BusSelection> {
           .where("date", isEqualTo: widget.date) // Match selected date
           .get();
 
-         print("Selected Cities: ${widget.city1} to ${widget.city2}");
-print("Document Name: $docName");
-        
-        print("🔹 Query executed: ${querySnapshot.size} buses found.");
-        
+      print("Selected Cities: ${widget.city1} to ${widget.city2}");
+      print("Document Name: $docName");
+
+      print("🔹 Query executed: ${querySnapshot.size} buses found.");
 
       if (querySnapshot.docs.isEmpty) {
         print("No buses found for ${widget.city1} to ${widget.city2}");
       }
-
-    
-      
 
       setState(() {
         buses = querySnapshot.docs.map((doc) {
@@ -97,15 +91,14 @@ print("Document Name: $docName");
             "bus": data["BusNum"].toString(), // Bus name
             "time": data["time"].toString(), // Time interval
             "route": data["route"].toString(), // Route
+            "availableSeats": data["AvailableSeats"].toString(),
           };
         }).toList();
-        
       });
     } catch (e) {
       print("Error fetching buses: $e");
     }
   }
-
 
   // Input Field Widget
   Widget _dropdownField(String hintText, TextEditingController controller) {
@@ -228,6 +221,9 @@ print("Document Name: $docName");
                     child: ListView.builder(
                       itemCount: buses.length,
                       itemBuilder: (context, index) {
+                        int availableSeats = int.tryParse(
+                                buses[index]["availableSeats"] ?? "0") ??
+                            0;
                         return Card(
                           margin: const EdgeInsets.symmetric(
                               vertical: 5.0, horizontal: 20.0),
@@ -272,11 +268,24 @@ print("Document Name: $docName");
                                     ),
                                   ],
                                 ),
-                                const Icon(
-                                  Icons.directions_bus,
-                                  color: Color.fromARGB(255, 33, 32, 70),
-                                  size: 30,
-                                ),
+                                Column(
+                                  children: [
+                                    const Icon(
+                                      Icons.directions_bus,
+                                      color: Color.fromARGB(255, 33, 32, 70),
+                                      size: 30,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      '(${availableSeats}/12)', // Display available seats
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                             onTap: () {
