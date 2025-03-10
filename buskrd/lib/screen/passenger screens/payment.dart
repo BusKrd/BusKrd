@@ -32,7 +32,7 @@ class _PaymentState extends State<Payment> {
     } else if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Kirkuk") {
       docName = "SuliToKr";
     } else {
-      print("❌ No valid route found for ${widget.city1} to ${widget.city2}");
+      print("No valid route found for ${widget.city1} to ${widget.city2}");
       return;
     }
 
