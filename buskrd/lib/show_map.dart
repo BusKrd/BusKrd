@@ -58,6 +58,11 @@ class _MapPageHomeState extends State<MapPageHome> {
               onMapCreated: (GoogleMapController controller) {
                 googleMapController = controller;
               },
+              markers: {
+                Marker(
+                    markerId: MarkerId('current location'),
+                    icon: BitmapDescriptor.defaultMarker,
+                    position:mycurrentLoc),}
             ),
       // Add a Floating Action Button to center the map on the current location
       floatingActionButton: FloatingActionButton(
