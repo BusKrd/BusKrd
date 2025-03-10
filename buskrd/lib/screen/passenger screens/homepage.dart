@@ -19,24 +19,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final TextEditingController _searchController = TextEditingController();
-  LatLng? _searchedLocation;
+  
 
-  void _searchLocation() async {
-    String locationName = _searchController.text;
-    if (locationName.isEmpty) return;
-
-    try {
-      List<Location> locations = await locationFromAddress(locationName);
-      if (locations.isNotEmpty) {
-        setState(() {
-          _searchedLocation =
-              LatLng(locations.first.latitude, locations.first.longitude);
-        });
-      }
-    } catch (e) {
-      debugPrint("Error geocoding location: $e");
-    }
-  }
 
   final List<Map<String, String>> buses = [
     {"Place": "Place 1"},
@@ -120,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           suffixIcon: Icon(Icons.search),
                         ),
                         style: const TextStyle(color: Colors.black),
-                        onSubmitted: (value) => _searchLocation(),
+                        
                       ),
                     ),
                   ),
@@ -202,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       backgroundColor: Colors.transparent,
-      body: MapPageHome(searchedLocation: _searchedLocation),
+      body: const MapPageHome(),
       bottomNavigationBar: BottomNavigation(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
