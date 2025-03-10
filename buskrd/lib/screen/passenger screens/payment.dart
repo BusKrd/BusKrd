@@ -49,7 +49,7 @@ class _PaymentState extends State<Payment> {
       DocumentSnapshot busDoc = querySnapshot.docs.first;
       String busDocId = busDoc.id; // The actual document ID
 
-      print("✅ Found bus document ID: $busDocId");
+      print(" Found bus document ID: $busDocId");
 
       int availableSeats = busDoc["AvailableSeats"] ?? 0;
 
