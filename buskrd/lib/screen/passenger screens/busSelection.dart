@@ -18,8 +18,6 @@ class BusSelection extends StatefulWidget {
 }
 
 class _BusSelectionState extends State<BusSelection> {
-  final TextEditingController fromController = TextEditingController();
-  final TextEditingController toController = TextEditingController();
   List<String> cities = []; // Will store fetched city names
   List<Map<String, String>> buses = [];
 
@@ -101,31 +99,7 @@ class _BusSelectionState extends State<BusSelection> {
   }
 
   // Input Field Widget
-  Widget _dropdownField(String hintText, TextEditingController controller) {
-    var border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(22),
-      borderSide: const BorderSide(color: Colors.white),
-    );
-
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white),
-        enabledBorder: border,
-        focusedBorder: border,
-      ),
-      dropdownColor: Color.fromARGB(255, 156, 39, 176),
-      items: cities.map((String city) {
-        return DropdownMenuItem<String>(
-          value: city,
-          child: Text(city, style: const TextStyle(color: Colors.white)),
-        );
-      }).toList(),
-      onChanged: (String? newValue) {
-        controller.text = newValue!;
-      },
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -183,16 +157,27 @@ class _BusSelectionState extends State<BusSelection> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // First Input Field (From)
-                  _dropdownField(widget.city1, fromController),
-                  const SizedBox(height: 10), // Space between text fields
-                  // Second Input Field (To)
-                  _dropdownField(widget.city2, toController),
-                  const SizedBox(height: 10), // Space between text fields
-                ],
-              ),
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.city1, // City 1
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    const Icon(
+                      Icons.arrow_downward_rounded,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      widget.city2, // City 2
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      widget.date, // Date
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ],
+                ),
             ),
           ),
           // Bottom Half with list of buses and rounded top corners

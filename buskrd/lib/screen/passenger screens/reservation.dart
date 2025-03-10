@@ -8,6 +8,8 @@ import 'package:buskrd/screen/passenger%20screens/route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+
+
 class SeatReservation extends StatefulWidget {
   @override
   _SeatReservationState createState() => _SeatReservationState();
@@ -28,24 +30,27 @@ class _SeatReservationState extends State<SeatReservation> {
   }
 
   // Function to fetch city names from Firestore
- void fetchCities() async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  try {
-    DocumentSnapshot doc = await firestore.collection("cities").doc("kurdistan").get();
+  void fetchCities() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      DocumentSnapshot doc =
+          await firestore.collection("cities").doc("kurdistan").get();
 
-    if (doc.exists) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      setState(() {
-        cities = List<String>.from(data["city"] ?? []); // Convert Firestore array to List<String> safely
-      });
-    } else {
-      print("Document does not exist");
+      if (doc.exists) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        setState(() {
+          cities = List<String>.from(data["city"] ??
+              []); // Convert Firestore array to List<String> safely
+        });
+      } else {
+        print("Document does not exist");
+      }
+    } catch (e) {
+      print("Error fetching cities: $e");
     }
-  } catch (e) {
-    print("Error fetching cities: $e");
   }
-}
-void _onItemTapped(int index) {
+
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -59,13 +64,12 @@ void _onItemTapped(int index) {
         context,
         MaterialPageRoute(builder: (context) => const RouteScreen()),
       );
-      } else if (index == 3) {
+    } else if (index == 3) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const PassengerNotification()),
       );
-    }
-    else if (index == 4) {
+    } else if (index == 4) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const PassengerProfile()),
@@ -100,6 +104,31 @@ void _onItemTapped(int index) {
     );
   }
 
+  void _validateAndProceed() {
+    if (fromController.text.isEmpty ||
+        toController.text.isEmpty ||
+        dateController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content:
+              Text("Please select both cities and a date before proceeding."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BusSelection(
+            city1: fromController.text,
+            city2: toController.text,
+            date: dateController.text,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,7 +153,8 @@ void _onItemTapped(int index) {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -150,25 +180,20 @@ void _onItemTapped(int index) {
                   const SizedBox(height: 80),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BusSelection(
-                            city1: fromController.text,
-                            city2: toController.text,
-                            date: dateController.text,
-                          ),
-                        ),
-                      );
+                      _validateAndProceed();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFEB958),
                       shape: const StadiumBorder(),
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
                     ),
                     child: const Text(
                       "Continue",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                   ),
                 ],
