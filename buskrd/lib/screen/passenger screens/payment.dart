@@ -41,7 +41,7 @@ class _PaymentState extends State<Payment> {
         .collection("Bus")
         .doc(docName)
         .collection("Buses")
-        .where("BusNum", isEqualTo: widget.bus) // Filter buses by BusNum
+        .where("busNumber", isEqualTo: widget.bus) // Filter buses by BusNum
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
@@ -51,7 +51,7 @@ class _PaymentState extends State<Payment> {
 
       print(" Found bus document ID: $busDocId");
 
-      int availableSeats = busDoc["AvailableSeats"] ?? 0;
+      int ReservedSeats = busDoc["ReservedSeats"] ?? 0;
 
       // Update the available seats
       await firestore
@@ -60,7 +60,7 @@ class _PaymentState extends State<Payment> {
           .collection("Buses")
           .doc(busDocId) // Use the found document ID
           .update({
-        "AvailableSeats": availableSeats + 1,
+        "ReservedSeats": ReservedSeats + 1,
       });
 
       print("Available seats updated successfully.");

@@ -2,6 +2,7 @@ import 'package:buskrd/navigators/driver_bottom_navigation.dart';
 import 'package:buskrd/screen/Driver%20screens/driver_notification.dart';
 import 'package:buskrd/screen/Driver%20screens/driver_profile.dart';
 import 'package:buskrd/screen/Driver%20screens/map_driver.dart';
+import 'package:buskrd/screen/Driver%20screens/seat.dart';
 import 'package:buskrd/screen/Driver%20screens/time_table.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +28,15 @@ class _HomeDriverState extends State<HomeDriver> {
       Navigator.push(context, MaterialPageRoute(builder: (context)=> TimeTable(),),);
      
     }
-    else if (index == 2) {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverNotification(),),);
+    if (index == 2) {
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> ReserveSeat()),);
      
     }
     else if (index == 3) {
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverNotification(),),);
+     
+    }
+    else if (index == 4) {
     Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverProfile(),),);
     }
     

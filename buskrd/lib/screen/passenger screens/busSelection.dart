@@ -1,3 +1,4 @@
+import 'package:buskrd/screen/Driver%20screens/seat.dart';
 import 'package:buskrd/screen/passenger%20screens/payment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -86,10 +87,10 @@ class _BusSelectionState extends State<BusSelection> {
         buses = querySnapshot.docs.map((doc) {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
           return {
-            "bus": data["BusNum"].toString(), // Bus name
+            "bus": data["busNumber"].toString(), // Bus name
             "time": data["time"].toString(), // Time interval
             "route": data["route"].toString(), // Route
-            "availableSeats": data["AvailableSeats"].toString(),
+            "ReservedSeats": data["ReservedSeats"].toString(),
           };
         }).toList();
       });
@@ -206,8 +207,8 @@ class _BusSelectionState extends State<BusSelection> {
                     child: ListView.builder(
                       itemCount: buses.length,
                       itemBuilder: (context, index) {
-                        int availableSeats = int.tryParse(
-                                buses[index]["availableSeats"] ?? "0") ??
+                        int ReservedSeats = int.tryParse(
+                                buses[index]["ReservedSeats"] ?? "0") ??
                             0;
                         return Card(
                           margin: const EdgeInsets.symmetric(
@@ -263,7 +264,7 @@ class _BusSelectionState extends State<BusSelection> {
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
-                                      '(${availableSeats}/12)', // Display available seats
+                                      '(${ReservedSeats}/12)', // Display available seats
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,

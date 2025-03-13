@@ -2,21 +2,21 @@ import 'package:buskrd/navigators/driver_bottom_navigation.dart';
 import 'package:buskrd/screen/Driver%20screens/driver_notification.dart';
 import 'package:buskrd/screen/Driver%20screens/driver_profile.dart';
 import 'package:buskrd/screen/Driver%20screens/homeDriver.dart';
-import 'package:buskrd/screen/Driver%20screens/seat.dart';
-import 'package:flutter/foundation.dart';
+import 'package:buskrd/screen/Driver%20screens/time_table.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-class TimeTable extends StatefulWidget {
-  const TimeTable({super.key});
+class ReserveSeat extends StatefulWidget {
+  const ReserveSeat({super.key});
 
   @override
-  State<TimeTable> createState() => _TimeTableState();
+  State<ReserveSeat> createState() => _ReserveSeatState();
 }
 
-class _TimeTableState extends State<TimeTable> {
-  int _selectedIndex = 0;
+class _ReserveSeatState extends State<ReserveSeat> {
+int _selectedIndex = 0;
 
-
+  
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -27,8 +27,8 @@ class _TimeTableState extends State<TimeTable> {
       Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeDriver(),),);
      
     }
-    else if (index == 2) {
-     Navigator.push(context, MaterialPageRoute(builder: (context)=> ReserveSeat(),),);
+    else if (index == 1) {
+     Navigator.push(context, MaterialPageRoute(builder: (context)=> TimeTable()),);
     }
     else if (index == 3) {
      Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverNotification(),),);
@@ -41,7 +41,7 @@ class _TimeTableState extends State<TimeTable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text("time table")),
+      body: const Center(child: Text("time table")),
       bottomNavigationBar: DriverBottomNavigation(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
     );
   }

@@ -1,7 +1,9 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:buskrd/screen/Driver%20screens/signup_driver.dart';
+import 'package:intl/intl.dart';
 
 class BusSignup extends StatefulWidget {
   const BusSignup({super.key});
@@ -13,8 +15,8 @@ class BusSignup extends StatefulWidget {
 class _BusSignupState extends State<BusSignup> {
   final TextEditingController busNumberController = TextEditingController();
   final TextEditingController plateNumberController = TextEditingController();
+  final List<String> routes = ["Klklasmaq", "Kirkuk", "Smaqoli"];
 
-  /// Check if busNumber or plateNumber already exists in Firestore
   Future<bool> isBusInfoUnique(String busNumber, String plateNumber) async {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('BusInformation')
@@ -22,7 +24,7 @@ class _BusSignupState extends State<BusSignup> {
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      return false; // Bus Number already exists
+      return false;
     }
 
     final plateQuerySnapshot = await FirebaseFirestore.instance
@@ -31,10 +33,10 @@ class _BusSignupState extends State<BusSignup> {
         .get();
 
     if (plateQuerySnapshot.docs.isNotEmpty) {
-      return false; // Plate Number already exists
+      return false;
     }
 
-    return true; // Both are unique
+    return true;
   }
 
   Future<void> addBusInfoToFirestore() async {
@@ -55,21 +57,35 @@ class _BusSignupState extends State<BusSignup> {
     }
 
     try {
-      // Add the unique bus information to Firestore
       await FirebaseFirestore.instance.collection('BusInformation').add({
         'busNumber': busNumber,
         'plateNumber': plateNumber,
+      });
 
+      String route = routes[Random().nextInt(routes.length)];
+        String date = DateFormat('M/dd/yyyy').format(DateTime.now());
+      int ReservedSeats = 0;
+      String time = "08:00 AM";
+
+      await FirebaseFirestore.instance
+          .collection('Bus')
+          .doc('SuliToEr')
+          .collection('Buses')
+          .doc(busNumber)
+          .set({
+        'busNumber': busNumber,
+        'ReservedSeats': ReservedSeats,
+        'date': date,
+        'route': route,
+        'time': time,
       });
 
       Get.snackbar("Success", "Bus Information Added",
           backgroundColor: Colors.green, colorText: Colors.white);
 
-      // Clear the fields after saving
       busNumberController.clear();
       plateNumberController.clear();
 
-      // Navigate to next screen
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const SignupDriver()),
