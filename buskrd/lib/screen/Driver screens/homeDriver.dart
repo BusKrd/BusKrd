@@ -1,6 +1,7 @@
 import 'package:buskrd/navigators/driver_bottom_navigation.dart';
 import 'package:buskrd/screen/Driver%20screens/driver_notification.dart';
 import 'package:buskrd/screen/Driver%20screens/driver_profile.dart';
+import 'package:buskrd/screen/Driver%20screens/map_driver.dart';
 import 'package:buskrd/screen/Driver%20screens/time_table.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -98,9 +99,8 @@ class _HomeDriverState extends State<HomeDriver> {
             child: Container(
               color: const Color.fromARGB(255, 255, 255, 255),
               child: const Center(
-                child: Text('Bottom Half', style: TextStyle(fontSize: 24, color: Colors.white)),
-              ),
-            ),
+                child:MapPageDriver(),
+            ),),
           ),
         ],
       ),

@@ -29,6 +29,10 @@ class _DriverBottomNavigationState extends State<DriverBottomNavigation> {
           label: 'Time Table',
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.view_timeline_sharp, color: Color.fromARGB(255, 156, 39, 176)), // Custom Reservation Icon
+          label: 'Seats',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.notifications_active, color: Color.fromARGB(255, 156, 39, 176)), // Custom Notification Icon
           label: 'Notifications',
         ),
