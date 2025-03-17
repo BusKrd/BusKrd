@@ -1,10 +1,11 @@
 import 'package:buskrd/screen/Driver%20screens/homeDriver.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class SignupDriver extends StatefulWidget {
-  const SignupDriver({super.key});
+  final String enteredCode;
+  const SignupDriver({super.key, required this.enteredCode});
 
   @override
   State<SignupDriver> createState() => _SignupDriverState();
@@ -198,7 +199,7 @@ class _SignupDriverState extends State<SignupDriver> {
   Widget _nextBtn() {
     return ElevatedButton(
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => HomeDriver()));
+        saveDriverInfo(widget.enteredCode);
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
@@ -215,4 +216,49 @@ class _SignupDriverState extends State<SignupDriver> {
       ),
     );
   }
+
+  Future<void> saveDriverInfo(String enteredCode) async {
+  String firstName = firstnameController.text.trim();
+  String lastName = lastnameController.text.trim();
+  String age = ageController.text.trim();
+  String gender = valueChoose;
+  String phone = phoneNumber?.phoneNumber ?? "";
+
+  if (firstName.isEmpty || lastName.isEmpty || age.isEmpty || gender.isEmpty || phone.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Please fill in all fields")),
+    );
+    return;
+  }
+
+  try {
+    await FirebaseFirestore.instance
+        .collection('drivers') // Change this to your correct collection
+        .doc(enteredCode)
+        .collection('info')
+        .doc('driverInfo')
+        .set({
+      'firstName': firstName,
+      'lastName': lastName,
+      'age': age,
+      'gender': gender,
+      'phone': phone,
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Driver information saved successfully!")),
+    );
+
+    // Navigate to HomeDriver
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomeDriver()),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Error saving data: $e")),
+    );
+  }
+}
+
   }

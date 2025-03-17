@@ -1,3 +1,4 @@
+import 'package:buskrd/screen/Driver%20screens/homeDriver.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:buskrd/screen/Driver%20screens/bus_signup.dart';
@@ -13,51 +14,101 @@ class _InvitationDriverState extends State<InvitationDriver> {
   final TextEditingController _codeController = TextEditingController();
   bool _isLoading = false;
 
-  Future<bool> _validateCode(String enteredCode) async {
+ // Function to check if the driver exists by the given code
+  Future<bool> _checkDriverExistsByCode(String enteredCode) async {
     try {
-      DocumentSnapshot<Map<String, dynamic>> snapshot = 
-          await FirebaseFirestore.instance.collection('DriverCode')
-          .doc('InvitationCodes')
+      DocumentSnapshot<Map<String, dynamic>> driverSnapshot = await FirebaseFirestore
+          .instance
+          .collection('drivers')
+          .doc(enteredCode)
           .get();
 
-      if (snapshot.exists) {
-        Map<String, dynamic>? data = snapshot.data();
-        if (data != null) {
-          List<String> codes = data.values.map((e) => e.toString()).toList();
-          return codes.contains(enteredCode);
-        }
-      }
+      // Return false if driver document does not exist
+      return driverSnapshot.exists && driverSnapshot.data() != null;
     } catch (e) {
-      print("Error fetching codes: $e");
+      print("Error checking driver document: $e");
+      return false;
     }
-    return false;
   }
+
+  Future<bool> _checkDriverInfo(String enteredCode) async {
+    try {
+      CollectionReference infoRef = FirebaseFirestore.instance
+          .collection('drivers')
+          .doc(enteredCode)
+          .collection('info');
+
+      // Fetch busInfo and driverInfo
+      DocumentSnapshot busInfoSnapshot = await infoRef.doc('busInfo').get();
+      DocumentSnapshot driverInfoSnapshot = await infoRef.doc('driverInfo').get();
+
+      bool hasBusInfo = busInfoSnapshot.exists &&
+          busInfoSnapshot.data() != null &&
+          (busInfoSnapshot.data() as Map<String, dynamic>).isNotEmpty;
+
+      bool hasDriverInfo = driverInfoSnapshot.exists &&
+          driverInfoSnapshot.data() != null &&
+          (driverInfoSnapshot.data() as Map<String, dynamic>).isNotEmpty;
+
+      return hasBusInfo && hasDriverInfo;
+    } catch (e) {
+      print("Error checking info documents: $e");
+      return false;
+    }
+  }
+
+
 
   void _onSubmit() async {
     setState(() {
       _isLoading = true;
     });
 
-    bool isValid = await _validateCode(_codeController.text.trim());
+    String enteredCode = _codeController.text.trim();
+
+    // Check if the driver exists
+    bool isDriverValid = await _checkDriverExistsByCode(enteredCode);
+    if (!isDriverValid) {
+      setState(() {
+        _isLoading = false;
+      });
+    // If driver is not valid, show a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Invalid driver code. Please check the code or contact the admin.',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return; // Stop execution here if the code is invalid
+    }
+
+     // If the driver exists, check if info (busInfo & driverInfo) exists
+    bool isInfoComplete = await _checkDriverInfo(enteredCode);
 
     setState(() {
       _isLoading = false;
     });
 
-    if (isValid) {
+ if (isInfoComplete) {
+      // If both busInfo and driverInfo exist → Navigate to HomeDriver screen
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => BusSignup()),
+        MaterialPageRoute(builder: (context) => HomeDriver()), // Replace with your screen
       );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Invalid invitation code. Please try again."),
-          backgroundColor: Colors.red,
-        ),
+} else {
+      // If either busInfo or driverInfo is missing, navigate to BusSignup
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => BusSignup(enteredCode: enteredCode)),
       );
     }
   }
+  
+    
+  
 
   @override
   Widget build(BuildContext context) {

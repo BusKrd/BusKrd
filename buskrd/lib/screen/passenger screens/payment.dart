@@ -51,7 +51,7 @@ class _PaymentState extends State<Payment> {
 
       print(" Found bus document ID: $busDocId");
 
-      int ReservedSeats = busDoc["ReservedSeats"] ?? 0;
+      int reservedSeats = busDoc["reservedSeats"] ?? 0;
 
       // Update the available seats
       await firestore
@@ -60,7 +60,7 @@ class _PaymentState extends State<Payment> {
           .collection("Buses")
           .doc(busDocId) // Use the found document ID
           .update({
-        "ReservedSeats": ReservedSeats + 1,
+        "reservedSeats": reservedSeats + 1,
       });
 
       print("Available seats updated successfully.");

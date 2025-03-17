@@ -90,7 +90,7 @@ class _BusSelectionState extends State<BusSelection> {
             "bus": data["busNumber"].toString(), // Bus name
             "time": data["time"].toString(), // Time interval
             "route": data["route"].toString(), // Route
-            "ReservedSeats": data["ReservedSeats"].toString(),
+            "reservedSeats": data["reservedSeats"].toString(),
           };
         }).toList();
       });
@@ -207,8 +207,8 @@ class _BusSelectionState extends State<BusSelection> {
                     child: ListView.builder(
                       itemCount: buses.length,
                       itemBuilder: (context, index) {
-                        int ReservedSeats = int.tryParse(
-                                buses[index]["ReservedSeats"] ?? "0") ??
+                        int reservedSeats = int.tryParse(
+                                buses[index]["reservedSeats"] ?? "0") ??
                             0;
                         return Card(
                           margin: const EdgeInsets.symmetric(
@@ -264,7 +264,7 @@ class _BusSelectionState extends State<BusSelection> {
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
-                                      '(${ReservedSeats}/12)', // Display available seats
+                                      '(${reservedSeats}/12)', // Display available seats
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
