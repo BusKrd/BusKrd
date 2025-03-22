@@ -1,3 +1,4 @@
+import 'package:buskrd/managaer/managar.dart';
 import 'package:buskrd/screen/passenger%20screens/login.dart';
 import 'package:buskrd/screen/Driver%20screens/invitation_driver.dart';
 //import 'package:buskrd/screen/homepage.dart';
@@ -92,7 +93,42 @@ class DecisionsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Spacer(), // Balances top and bottom
+                const Spacer(),
+
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Sign in as an",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ManagerScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Admin',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                
+                
               ],
             ),
           ),

@@ -85,10 +85,11 @@ class _BusSignupState extends State<BusSignup> {
     });
 
       String route = "";
-        String date = DateFormat('M/dd/yyyy').format(DateTime.now());
+      String date = DateFormat('M/dd/yyyy').format(DateTime.now());
       int reservedSeats = 0;
       String time = times[Random().nextInt(times.length)];
       String dest="";
+      
       if (["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].contains(busNumber)) {
         dest="SuliToEr";
        route= routes[Random().nextInt(routes.length)];
