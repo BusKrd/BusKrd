@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart'; // Import firebase_core
 import 'package:buskrd/screen/splash_screens.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
 Future<void> main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();

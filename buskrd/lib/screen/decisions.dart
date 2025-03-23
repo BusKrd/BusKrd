@@ -1,3 +1,4 @@
+import 'package:buskrd/managaer/dashboard.dart';
 import 'package:buskrd/managaer/managar.dart';
 import 'package:buskrd/screen/passenger%20screens/login.dart';
 import 'package:buskrd/screen/Driver%20screens/invitation_driver.dart';
@@ -110,7 +111,7 @@ class DecisionsScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ManagerScreen(),
+                            builder: (context) =>  DashboardScreen(),
                           ),
                         );
                       },
