@@ -102,6 +102,27 @@ class _AssignBusState extends State<AssignBus> {
               "driverName": fullName,
               "phoneNumber": driverData["phone"] ?? "No Phone",
             });
+          } else if (city == "Erbil" &&
+              busData["plateNumber"] != null &&
+              busData["plateNumber"].toString().startsWith("22")) {
+            busList.add({
+              "busNumber": busData["busNumber"],
+              "plateNumber": busData["plateNumber"],
+              "driverId": driverDoc.id,
+              "driverName": fullName,
+              "phoneNumber": driverData["phone"] ?? "No Phone",
+            });
+          } else if (city == "Kirkuk" &&
+              busData["plateNumber"] != null &&
+              busData["plateNumber"].toString().startsWith("23")) {
+            busList.add({
+              "busNumber": busData["busNumber"],
+              "plateNumber": busData["plateNumber"],
+              "driverId": driverDoc.id,
+              "driverName": fullName,
+              "phoneNumber": driverData["phone"] ?? "No Phone",
+            });
+
           }
         }
       }
@@ -410,7 +431,7 @@ class _AssignBusState extends State<AssignBus> {
         if (source == "Sulaymaniyah" && destination == "Erbil") {
           docName = "FJ6gDgls0EhZPmq2Sr5e";
         }
-        if (source == "Sulaymaniyah" && destination == "Kikruk") {
+        else if (source == "Sulaymaniyah" && destination == "Kirkuk") {
           docName = "YwiwQPElXpQVeDW5bsow";
         }
 

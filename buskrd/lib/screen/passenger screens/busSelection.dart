@@ -1,5 +1,6 @@
 import 'package:buskrd/screen/Driver%20screens/seat.dart';
 import 'package:buskrd/screen/passenger%20screens/payment.dart';
+import 'package:buskrd/screen/passenger%20screens/seats.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -277,7 +278,7 @@ class _BusSelectionState extends State<BusSelection> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Payment(
+                                  builder: (context) => Seats(
                                     bus: buses[index]["bus"]!,
                                     time: buses[index]["time"]!,
                                     route: buses[index]["route"]!,
