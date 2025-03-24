@@ -1,9 +1,8 @@
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:buskrd/screen/Driver%20screens/signup_driver.dart';
-import 'package:intl/intl.dart';
+
 
 class BusSignup extends StatefulWidget {
   final String enteredCode; // Accept entered code
@@ -16,43 +15,41 @@ class BusSignup extends StatefulWidget {
 class _BusSignupState extends State<BusSignup> {
   final TextEditingController busNumberController = TextEditingController();
   final TextEditingController plateNumberController = TextEditingController();
-  final List<String> routes = ["Klklasmaq", "Kirkuk", "Smaqoli"];
-  final List<String> times = ["08:00 AM", "10:00 AM", "12:00 PM", "02:00 PM", "04:00 PM"];
+  
 
   Future<bool> isBusInfoUnique(String busNumber, String plateNumber) async {
-  try {
-    final driversCollection = FirebaseFirestore.instance.collection('drivers');
+    try {
+      final driversCollection = FirebaseFirestore.instance.collection('drivers');
 
-    // Get all driver documents
-    final driversSnapshot = await driversCollection.get();
+      // Get all driver documents
+      final driversSnapshot = await driversCollection.get();
 
-    for (var driverDoc in driversSnapshot.docs) {
-      // Reference to `busInfo` document inside `info` subcollection
-      final busInfoRef = driversCollection
-          .doc(driverDoc.id)
-          .collection('info')
-          .doc('busInfo');
+      for (var driverDoc in driversSnapshot.docs) {
+        // Reference to `busInfo` document inside `info` subcollection
+        final busInfoRef = driversCollection
+            .doc(driverDoc.id)
+            .collection('info')
+            .doc('busInfo');
 
-      final busInfoSnapshot = await busInfoRef.get();
+        final busInfoSnapshot = await busInfoRef.get();
 
-      if (busInfoSnapshot.exists) {
-        final busData = busInfoSnapshot.data();
+        if (busInfoSnapshot.exists) {
+          final busData = busInfoSnapshot.data();
 
-        if (busData != null) {
-          // Check if busNumber or plateNumber already exists
-          if (busData['busNumber'] == busNumber || busData['plateNumber'] == plateNumber) {
-            return false; // Duplicate found
+          if (busData != null) {
+            // Check if busNumber or plateNumber already exists
+            if (busData['busNumber'] == busNumber || busData['plateNumber'] == plateNumber) {
+              return false; // Duplicate found
+            }
           }
         }
       }
+      return true; // No duplicates found
+    } catch (e) {
+      print("Error checking uniqueness: $e");
+      return false; // Assume not unique in case of error
     }
-    return true; // No duplicates found
-  } catch (e) {
-    print("Error checking uniqueness: $e");
-    return false; // Assume not unique in case of error
   }
-}
-
 
   Future<void> addBusInfoToFirestore() async {
     String busNumber = busNumberController.text.trim();
@@ -72,44 +69,16 @@ class _BusSignupState extends State<BusSignup> {
     }
 
     try {
-    // Firestore reference to the `busInfo` document inside the `info` subcollection
-    DocumentReference<Map<String, dynamic>> busInfoRef = FirebaseFirestore.instance
-        .collection('drivers')
-        .doc(widget.enteredCode) // Use the entered code
-        .collection('info')
-        .doc('busInfo');
+      // Firestore reference to the `busInfo` document inside the `info` subcollection
+      DocumentReference<Map<String, dynamic>> busInfoRef = FirebaseFirestore.instance
+          .collection('drivers')
+          .doc(widget.enteredCode) // Use the entered code
+          .collection('info')
+          .doc('busInfo');
 
-    await busInfoRef.set({
-      'busNumber': busNumber,
-      'plateNumber': plateNumber,
-    });
-
-      String route = "";
-      String date = DateFormat('M/dd/yyyy').format(DateTime.now());
-      int reservedSeats = 0;
-      String time = times[Random().nextInt(times.length)];
-      String dest="";
-      
-      if (["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].contains(busNumber)) {
-        dest="SuliToEr";
-       route= routes[Random().nextInt(routes.length)];
-      }
-      if (["11", "12", "13", "14", "15", "16", "17", "18", "19", "20"].contains(busNumber)) {
-        dest="SuliToKr";
-        route="Bazian";
-      }
-
-      await FirebaseFirestore.instance
-          .collection('Bus')
-          .doc(dest)
-          .collection('Buses')
-          .doc(busNumber)
-          .set({
+      await busInfoRef.set({
         'busNumber': busNumber,
-        'reservedSeats': reservedSeats,
-        'date': date,
-        'route': route,
-        'time': time,
+        'plateNumber': plateNumber,
       });
 
       Get.snackbar("Success", "Bus Information Added",

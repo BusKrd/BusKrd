@@ -7,9 +7,11 @@ class Payment extends StatefulWidget {
   final String route;
   final String city1;
   final String city2;
+  final String date ;
 
   const Payment(
       {super.key,
+      required this.date,
       required this.bus,
       required this.time,
       required this.route,
@@ -28,9 +30,9 @@ class _PaymentState extends State<Payment> {
     // Identify the correct document for the bus route
     String docName = "";
     if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Erbil") {
-      docName = "SuliToEr";
+      docName = "FJ6gDgls0EhZPmq2Sr5e";
     } else if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Kirkuk") {
-      docName = "SuliToKr";
+      docName = "YwiwQPElXpQVeDW5bsow";
     } else {
       print("No valid route found for ${widget.city1} to ${widget.city2}");
       return;
@@ -38,9 +40,9 @@ class _PaymentState extends State<Payment> {
 
     // Query the bus collection for the correct bus document
     QuerySnapshot querySnapshot = await firestore
-        .collection("Bus")
+        .collection("availableBuses")
         .doc(docName)
-        .collection("Buses")
+        .collection(widget.date)
         .where("busNumber", isEqualTo: widget.bus) // Filter buses by BusNum
         .get();
 
@@ -55,9 +57,9 @@ class _PaymentState extends State<Payment> {
 
       // Update the available seats
       await firestore
-          .collection("Bus")
+          .collection("availableBuses")
           .doc(docName)
-          .collection("Buses")
+          .collection(widget.date)
           .doc(busDocId) // Use the found document ID
           .update({
         "reservedSeats": reservedSeats + 1,

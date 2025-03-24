@@ -1,4 +1,6 @@
-import 'package:buskrd/managaer/managar.dart';
+import 'package:buskrd/managaer/bus_assignment.dart';
+import 'package:buskrd/managaer/drivers_list.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -19,23 +21,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Text("Dashboard", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             SizedBox(height: 15),
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Icon(Icons.business, size: 40),
-                    SizedBox(height: 8),
-                    Text("Manager", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 4),
-                    Text("Total number of buses",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green)),
-                    SizedBox(height: 8),
-                    Text("3", style: TextStyle(color: Colors.black, fontSize: 16)),
-                  ],
-                ),
-              ),
+            // Display the total number of buses from Firestore
+            FutureBuilder<int>(
+              future: _getTotalBuses(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+                if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                }
+                if (snapshot.hasData) {
+                  return Card(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Icon(Icons.business, size: 40),
+                          SizedBox(height: 8),
+                          Text("Manager", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 4),
+                          Text("Total number of buses",
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green)),
+                          SizedBox(height: 8),
+                          Text("${snapshot.data}", style: TextStyle(color: Colors.black, fontSize: 16)),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                return Container();
+              },
             ),
             SizedBox(height: 25),
             Expanded(
@@ -48,22 +65,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => AssignBus()));
                   }),
                   _buildCard("List of drivers", Icons.list_alt, () {
-                    print("List of drivers clicked");
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DriversList()));
                   }),
-                  _buildCard("PICKUP", Icons.store, () {
-                    print("PICKUP clicked");
+                  _buildCard("idk yet", Icons.question_mark, () {
+                    print("soon");
                   }),
                   _buildCard("Profile", Icons.person, () {
                     print("Profile clicked");
                   }),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
+
+  // Function to get total buses count from Firestore
+  // Function to get total buses count from Firestore
+Future<int> _getTotalBuses() async {
+  int totalBuses = 0;
+
+  try {
+    // Get the 'drivers' collection
+    QuerySnapshot driversSnapshot = await FirebaseFirestore.instance.collection('drivers').get();
+
+    // Loop through all the driver documents
+    for (var driverDoc in driversSnapshot.docs) {
+      // Get the 'info' subcollection for each driver
+      var infoCollection = driverDoc.reference.collection('info');
+      var busInfoDoc = await infoCollection.doc('busInfo').get();
+
+      // If busInfo document exists and contains the 'busNumber' field, count the bus
+      if (busInfoDoc.exists && busInfoDoc.data() != null) {
+        var busData = busInfoDoc.data();
+
+        // Check if 'busNumber' field exists and is not null
+        if (busData != null && busData.containsKey('busNumber') && busData['busNumber'] != null) {
+          totalBuses++;  // Increment the total buses count
+        }
+      }
+    }
+  } catch (e) {
+    print("Error fetching bus count: $e");
+  }
+
+  return totalBuses;
+}
 
   Widget _buildCard(String title, IconData icon, VoidCallback onTap) {
     return InkWell(

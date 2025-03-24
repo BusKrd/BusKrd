@@ -1,5 +1,5 @@
 import 'package:buskrd/managaer/dashboard.dart';
-import 'package:buskrd/managaer/managar.dart';
+import 'package:buskrd/managaer/bus_assignment.dart';
 import 'package:buskrd/screen/passenger%20screens/login.dart';
 import 'package:buskrd/screen/Driver%20screens/invitation_driver.dart';
 //import 'package:buskrd/screen/homepage.dart';

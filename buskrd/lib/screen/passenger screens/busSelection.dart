@@ -56,22 +56,20 @@ class _BusSelectionState extends State<BusSelection> {
 
     // Determine the correct document
     if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Erbil") {
-      docName = "SuliToEr";
+      docName = "FJ6gDgls0EhZPmq2Sr5e";
     } else if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Kirkuk") {
-      docName = "SuliToKr";
+      docName = "YwiwQPElXpQVeDW5bsow";
     } else {
       print("No valid route found for ${widget.city1} to ${widget.city2}");
       return;
     }
 
     try {
-      print("Selected date: ${widget.date}");
 
       QuerySnapshot querySnapshot = await firestore
-          .collection("Bus")
+          .collection("availableBuses")
           .doc(docName)
-          .collection("Buses")
-          .where("date", isEqualTo: widget.date) // Match selected date
+          .collection(widget.date)
           .get();
 
       print("Selected Cities: ${widget.city1} to ${widget.city2}");
@@ -285,6 +283,7 @@ class _BusSelectionState extends State<BusSelection> {
                                     route: buses[index]["route"]!,
                                     city1: widget.city1,
                                     city2: widget.city2,
+                                    date: widget.date,
                                   ),
                                 ),
                               );

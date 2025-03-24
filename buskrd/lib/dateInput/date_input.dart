@@ -22,7 +22,7 @@ class _DateInputState extends State<DateInput> {
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
-        widget.dateController.text = "${picked.month}/${picked.day}/${picked.year}";
+widget.dateController.text = "${picked.year.toString().padLeft(4, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
       });
     }
   }
@@ -85,7 +85,7 @@ class _DateInputState extends State<DateInput> {
                 controller: widget.dateController,
                 readOnly: true,
                 decoration: InputDecoration(
-                  hintText: "mm/dd/yyyy",
+                  hintText: "yyyy/mm/dd",
                   hintStyle: const TextStyle(
                     color: Colors.black38,
                     fontSize: 14,
