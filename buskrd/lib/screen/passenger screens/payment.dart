@@ -7,7 +7,9 @@ class Payment extends StatefulWidget {
   final String route;
   final String city1;
   final String city2;
-  final String date ;
+  final String date;
+  final List<int> selectedSeats;
+  final String docName ;
 
   const Payment(
       {super.key,
@@ -16,63 +18,81 @@ class Payment extends StatefulWidget {
       required this.time,
       required this.route,
       required this.city1,
-      required this.city2});
+      required this.city2,
+      required this.selectedSeats,
+      required this.docName});
+
   @override
   _PaymentState createState() => _PaymentState();
 }
 
 class _PaymentState extends State<Payment> {
+  
 
-   void incSeat() async {
-  try {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    // Identify the correct document for the bus route
-    String docName = "";
-    if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Erbil") {
-      docName = "FJ6gDgls0EhZPmq2Sr5e";
-    } else if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Kirkuk") {
-      docName = "YwiwQPElXpQVeDW5bsow";
-    } else {
-      print("No valid route found for ${widget.city1} to ${widget.city2}");
-      return;
-    }
-
-    // Query the bus collection for the correct bus document
-    QuerySnapshot querySnapshot = await firestore
-        .collection("availableBuses")
-        .doc(docName)
-        .collection(widget.date)
-        .where("busNumber", isEqualTo: widget.bus) // Filter buses by BusNum
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      // Get the first matching document
-      DocumentSnapshot busDoc = querySnapshot.docs.first;
-      String busDocId = busDoc.id; // The actual document ID
-
-      print(" Found bus document ID: $busDocId");
-
-      int reservedSeats = busDoc["reservedSeats"] ?? 0;
-
-      // Update the available seats
-      await firestore
+  // Increment the reserved seats based on the selected seats
+  void incSeat() async {
+    try {
+        // Query the bus collection for the correct bus document
+      QuerySnapshot querySnapshot = await _firestore
           .collection("availableBuses")
-          .doc(docName)
+          .doc(widget.docName)
           .collection(widget.date)
-          .doc(busDocId) // Use the found document ID
+          .where("busNumber", isEqualTo: widget.bus) // Filter buses by BusNum
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Get the first matching document
+        DocumentSnapshot busDoc = querySnapshot.docs.first;
+        String busDocId = busDoc.id; // The actual document ID
+
+        print("Found bus document ID: $busDocId");
+
+        int reservedSeats = busDoc["reservedSeats"] ?? 0;
+        int selectedSeatsCount = widget.selectedSeats.length;
+
+        // Increment the reservedSeats by the number of selected seats
+        await _firestore
+            .collection("availableBuses")
+            .doc(widget.docName)
+            .collection(widget.date)
+            .doc(busDocId) // Use the found document ID
+            .update({
+          "reservedSeats": reservedSeats + selectedSeatsCount,
+        });
+
+        print("Available seats updated successfully.");
+      } else {
+        print("No matching bus found for BusNum: ${widget.bus}");
+      }
+    } catch (e) {
+      print("🔥 Error updating available seats: $e");
+    }
+  }
+
+  // Save selected seats to Firestore
+  Future<void> saveSelectedSeats(List<int> selectedSeats) async {
+    try {
+      await _firestore
+          .collection('availableBuses')
+          .doc(widget.docName)
+          .collection(widget.date)
+          .doc(widget.bus)
           .update({
-        "reservedSeats": reservedSeats + 1,
+        'selectedSeats': FieldValue.arrayUnion(selectedSeats),
       });
 
-      print("Available seats updated successfully.");
-    } else {
-      print("No matching bus found for BusNum: ${widget.bus}");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Seats saved successfully!"),
+      ));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error saving seats: $e"),
+      ));
     }
-  } catch (e) {
-    print("🔥 Error updating available seats: $e");
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,7 +143,6 @@ class _PaymentState extends State<Payment> {
                 bottomRight: Radius.circular(30), // Rounded bottom-right corner
               ),
             ),
-
             child: Column(
               children: [
                 const SizedBox(height: 20),
@@ -181,13 +200,18 @@ class _PaymentState extends State<Payment> {
                     width: 200, // Set a fixed width for both buttons
                     child: ElevatedButton(
                       onPressed: () {
-                        
+                        // Increment reserved seats by the selected seats
                         incSeat();
+
+                        // Save selected seats to Firestore
+                        saveSelectedSeats(widget.selectedSeats);
+
                         // Handle FIB payment method
                         print('Selected FIB');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFEB958), // Light grey background
+                        backgroundColor:
+                            const Color(0xFFFEB958), // Light grey background
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -211,7 +235,8 @@ class _PaymentState extends State<Payment> {
                         print('Selected FastPay');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFEB958), // Light grey background
+                        backgroundColor:
+                            const Color(0xFFFEB958), // Light grey background
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

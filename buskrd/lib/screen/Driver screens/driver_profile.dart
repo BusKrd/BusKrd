@@ -34,10 +34,8 @@ class _DriverProfileState extends State<DriverProfile> {
       Navigator.push(context, MaterialPageRoute(builder: (context)=> TimeTable(),),);
      
     }
+    
     else if (index == 2) {
-     Navigator.push(context, MaterialPageRoute(builder: (context)=> ReserveSeat()),);
-    }
-    else if (index == 3) {
     Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverNotification(),),);
     }
     

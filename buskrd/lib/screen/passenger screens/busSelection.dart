@@ -1,6 +1,7 @@
 import 'package:buskrd/screen/Driver%20screens/seat.dart';
 import 'package:buskrd/screen/passenger%20screens/payment.dart';
 import 'package:buskrd/screen/passenger%20screens/seats.dart';
+import 'package:buskrd/screen/passenger%20screens/seats.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +23,7 @@ class BusSelection extends StatefulWidget {
 class _BusSelectionState extends State<BusSelection> {
   List<String> cities = []; // Will store fetched city names
   List<Map<String, String>> buses = [];
+  String docName = "";
 
   @override
   void initState() {
@@ -53,7 +55,7 @@ class _BusSelectionState extends State<BusSelection> {
 
   void fetchBuses() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    String docName = "";
+    
 
     // Determine the correct document
     if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Erbil") {
@@ -278,13 +280,15 @@ class _BusSelectionState extends State<BusSelection> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Seats(
+                                  builder: (context) => SeatLayout(
                                     bus: buses[index]["bus"]!,
                                     time: buses[index]["time"]!,
                                     route: buses[index]["route"]!,
                                     city1: widget.city1,
                                     city2: widget.city2,
                                     date: widget.date,
+                                    docName: docName,
+                                    
                                   ),
                                 ),
                               );

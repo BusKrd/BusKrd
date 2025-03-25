@@ -28,15 +28,12 @@ class _HomeDriverState extends State<HomeDriver> {
       Navigator.push(context, MaterialPageRoute(builder: (context)=> TimeTable(),),);
      
     }
-    if (index == 2) {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> ReserveSeat()),);
-     
-    }
-    else if (index == 3) {
+    
+    else if (index == 2) {
       Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverNotification(),),);
      
     }
-    else if (index == 4) {
+    else if (index == 3) {
     Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverProfile(),),);
     }
     
