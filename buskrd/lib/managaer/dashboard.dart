@@ -1,7 +1,9 @@
 import 'package:buskrd/managaer/bus_assignment.dart';
 import 'package:buskrd/managaer/drivers_list.dart';
+import 'package:buskrd/managaer/edit_assigned_bus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -67,8 +69,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   _buildCard("List of drivers", Icons.list_alt, () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => DriversList()));
                   }),
-                  _buildCard("idk yet", Icons.question_mark, () {
-                    print("soon");
+                  _buildCard("Update/Delete", Icons.edit_calendar, () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditAsBuses()));
                   }),
                   _buildCard("Profile", Icons.person, () {
                     print("Profile clicked");

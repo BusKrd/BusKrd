@@ -489,6 +489,7 @@ class _AssignBusState extends State<AssignBus> {
               .collection(formattedDate) // Subcollection for the specific date
               .doc(busNumber) // Each bus has its own document with bus number as ID
               .set({
+            'selectedSeats': FieldValue.arrayUnion([]),
             'reservedSeats': reservedSeats,
             "timestamp": timestamp,
             "source": source,
