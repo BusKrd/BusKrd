@@ -96,7 +96,7 @@ class _InvitationDriverState extends State<InvitationDriver> {
       // If both busInfo and driverInfo exist → Navigate to HomeDriver screen
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomeDriver()), // Replace with your screen
+        MaterialPageRoute(builder: (context) => HomeDriver(enteredCode: enteredCode)), // Replace with your screen
       );
 } else {
       // If either busInfo or driverInfo is missing, navigate to BusSignup

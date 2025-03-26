@@ -10,7 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DriverProfile extends StatefulWidget {
-  const DriverProfile({super.key});
+  final String enteredCode;
+  const DriverProfile({super.key, required this.enteredCode});
 
   @override
   State<DriverProfile> createState() => _DriverProfileState();
@@ -27,16 +28,16 @@ class _DriverProfileState extends State<DriverProfile> {
 
     // Navigate to the Route screen when the second icon (index 1) is tapped
     if (index == 0) {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeDriver(),),);
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeDriver(enteredCode: widget.enteredCode),),);
      
     }
     if (index == 1) {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> TimeTable(),),);
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> TimeTable(enteredCode: widget.enteredCode),),);
      
     }
     
     else if (index == 2) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverNotification(),),);
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverNotification(enteredCode: widget.enteredCode),),);
     }
     
   }

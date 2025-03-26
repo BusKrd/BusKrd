@@ -400,84 +400,143 @@ class _AssignBusState extends State<AssignBus> {
   }
 
   Future<void> saveBusDetailsToFirestore(
-      String source,
-      Map<String, Map<String, String>> selectedBusDetails,
-      String dateString) async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    String source,
+    Map<String, Map<String, String>> selectedBusDetails,
+    String dateString) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    // Convert the date string from the dateController to a DateTime object
-    DateTime selectedDate = DateTime.parse(
-        dateString); // Assuming the date is in "yyyy-MM-dd" format
-    Timestamp timestamp =
-        Timestamp.fromDate(selectedDate); // Convert to Firestore timestamp
+  // Convert the date string from the dateController to a DateTime object
+  DateTime selectedDate = DateTime.parse(dateString); // Assuming the date is in "yyyy-MM-dd" format
+  String formattedDate = "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
+  Timestamp timestamp = Timestamp.fromDate(selectedDate); // Convert to Firestore timestamp
 
-    for (var entry in selectedBuses.entries) {
-      if (entry.value) {
-        // Process only selected buses
-        String plateNumber = entry.key;
-        Map<String, String> busDetails = selectedBusDetails[plateNumber] ?? {};
+  // Debugging - check values
+  print("Formatted date: $formattedDate");
 
-        String destination = busDetails["destination"] ?? "";
-        String route = busDetails["route"] ?? "";
-        String time = busDetails["time"] ?? "";
-        int reservedSeats = 0;
+  for (var entry in selectedBuses.entries) {
+    if (entry.value) {
+      // Process only selected buses
+      String plateNumber = entry.key;
+      Map<String, String> busDetails = selectedBusDetails[plateNumber] ?? {};
 
-        // Get the bus number from the buses list
-        String busNumber = buses.firstWhere(
-            (bus) => bus["plateNumber"] == plateNumber)["busNumber"];
+      String destination = busDetails["destination"] ?? "";
+      String route = busDetails["route"] ?? "";
+      String time = busDetails["time"] ?? "";
+      int reservedSeats = 0;
 
-        String docName = "";
-        // Check if source and destination match specific conditions
-        if (source == "Sulaymaniyah" && destination == "Erbil") {
-          docName = "FJ6gDgls0EhZPmq2Sr5e";
+      // Get the bus number from the buses list
+      String busNumber = buses.firstWhere(
+          (bus) => bus["plateNumber"] == plateNumber)["busNumber"];
+
+      String docName = "";
+      // Check if source and destination match specific conditions
+      if (source == "Sulaymaniyah" && destination == "Erbil") {
+        docName = "FJ6gDgls0EhZPmq2Sr5e";
+      }
+      else if (source == "Sulaymaniyah" && destination == "Kirkuk") {
+        docName = "YwiwQPElXpQVeDW5bsow";
+      }
+
+      // Check if docName or dateString is empty
+      print("docName: $docName");
+      print("formattedDate: $formattedDate");
+
+      if (docName.isEmpty || formattedDate.isEmpty) {
+        print("Error: docName or formattedDate is empty!");
+        return; // Early exit if any value is invalid
+      }
+
+      try {
+        // Now we will check for all availableBuses documents for the selected date
+        QuerySnapshot existingAssignments = await firestore
+            .collection("availableBuses")
+            .get(); // Fetch all documents in the availableBuses collection
+
+        if (existingAssignments.docs.isEmpty) {
+          print("No documents found in availableBuses collection.");
         }
-        else if (source == "Sulaymaniyah" && destination == "Kirkuk") {
-          docName = "YwiwQPElXpQVeDW5bsow";
-        }
 
-        // Check if the bus is already assigned for the selected date
-        try {
-          DocumentSnapshot existingAssignment = await firestore
-              .collection("availableBuses")
-              .doc(docName)
-              .collection(dateString)
-              .doc(busNumber)
+        // Loop through all available bus documents and check for conflicts
+        bool busAlreadyAssigned = false;
+
+        for (var doc in existingAssignments.docs) {
+          QuerySnapshot dateAssignmentsSnapshot = await doc.reference
+              .collection(formattedDate) // Get the subcollection for the specific date
               .get();
 
-          if (existingAssignment.exists) {
-            _showAlreadyAssignedDialog();
-          } else {
-            // Proceed with saving the bus details if it's not assigned
-            await firestore
-                .collection("availableBuses")
-                .doc(docName)
-                .collection(dateString) // Subcollection "buses"
-                .doc(busNumber) // Each bus has its own document with bus number as ID
-                .set({
-              'reservedSeats': reservedSeats,
-              "timestamp": timestamp,
-              "source": source,
-              "destination": destination,
-              "route": route,
-              "time": time,
-              "plateNumber": plateNumber,
-              "busNumber": busNumber, // Include the bus number
-              "driverName": buses.firstWhere(
-                  (bus) => bus["plateNumber"] == plateNumber)["driverName"],
-              "phoneNumber": buses.firstWhere(
-                  (bus) => bus["plateNumber"] == plateNumber)["phoneNumber"],
-            });
+          for (var busDoc in dateAssignmentsSnapshot.docs) {
+            Map<String, dynamic> busData = busDoc.data() as Map<String, dynamic>;
 
-            print("Bus $plateNumber assigned successfully.");
+            // Check if the same bus has already been assigned for the same date
+            if (busData["plateNumber"] == plateNumber) {
+              busAlreadyAssigned = true;
+              break;
+            }
           }
-        } catch (e) {
-          print("Error checking if bus is assigned: $e");
+
+          if (busAlreadyAssigned) {
+            break;
+          }
         }
+
+        if (busAlreadyAssigned) {
+          _showAlreadyAssignedDialog();
+        } else {
+          // Proceed with saving the bus details if no conflicts
+          await firestore
+              .collection("availableBuses")
+              .doc(docName)
+              .collection(formattedDate) // Subcollection for the specific date
+              .doc(busNumber) // Each bus has its own document with bus number as ID
+              .set({
+            'reservedSeats': reservedSeats,
+            "timestamp": timestamp,
+            "source": source,
+            "destination": destination,
+            "route": route,
+            "time": time,
+            "plateNumber": plateNumber,
+            "busNumber": busNumber, // Include the bus number
+            "driverName": buses.firstWhere(
+                (bus) => bus["plateNumber"] == plateNumber)["driverName"],
+            "phoneNumber": buses.firstWhere(
+                (bus) => bus["plateNumber"] == plateNumber)["phoneNumber"],
+          });
+
+          print("Bus $plateNumber assigned successfully.");
+        }
+      } catch (e) {
+        print("Error checking if bus is assigned: $e");
       }
     }
-
-    print("All selected buses have been processed.");
   }
+
+  print("All selected buses have been processed.");
+}
+
+
+
+void _showConflictingAssignmentDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Bus Conflict Detected"),
+        content: const Text(
+            "This bus has already been assigned to a different route for the selected date."),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   /// Show a dialog indicating that the bus is already assigned
   void _showAlreadyAssignedDialog() {

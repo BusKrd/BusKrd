@@ -252,7 +252,7 @@ class _SignupDriverState extends State<SignupDriver> {
     // Navigate to HomeDriver
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomeDriver()),
+      MaterialPageRoute(builder: (context) => HomeDriver(enteredCode:widget.enteredCode)),
     );
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
