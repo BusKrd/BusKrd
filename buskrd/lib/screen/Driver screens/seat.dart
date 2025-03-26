@@ -14,9 +14,10 @@ class Details extends StatefulWidget {
   @override
   State<Details> createState() => _DetailsState();
 }
+
 class _DetailsState extends State<Details> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
+
   final List<List<String>> seatPattern = [
     ["_", "_", "_", "s"],
     ["s", "s", "_", "_"],
@@ -90,7 +91,7 @@ class _DetailsState extends State<Details> {
 
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot busDoc = querySnapshot.docs.first;
-        String busDocId = busDoc.id; 
+        String busDocId = busDoc.id;
 
         int reservedSeatsCount = busDoc["reservedSeats"] ?? 0;
         int selectedSeatsCount = clickedSeats.length;
@@ -113,32 +114,32 @@ class _DetailsState extends State<Details> {
     }
   }
 
- Future<void> _fetchReservedSeats() async {
-  try {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('availableBuses')
-        .doc(docName)
-        .collection(widget.selectedDate)
-        .where("busNumber", isEqualTo: busNumber)
-        .get();
+  Future<void> _fetchReservedSeats() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('availableBuses')
+          .doc(docName)
+          .collection(widget.selectedDate)
+          .where("busNumber", isEqualTo: busNumber)
+          .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      List<int> fetchedSeats = [];
-      for (var doc in querySnapshot.docs) {
-        fetchedSeats.addAll(List<int>.from(doc['selectedSeats'] ?? []));
-      }
+      if (querySnapshot.docs.isNotEmpty) {
+        List<int> fetchedSeats = [];
+        for (var doc in querySnapshot.docs) {
+          fetchedSeats.addAll(List<int>.from(doc['selectedSeats'] ?? []));
+        }
 
-      // Only call setState if the widget is still mounted
-      if (mounted) {
-        setState(() {
-          reservedSeats = fetchedSeats;
-        });
+        // Only call setState if the widget is still mounted
+        if (mounted) {
+          setState(() {
+            reservedSeats = fetchedSeats;
+          });
+        }
       }
+    } catch (e) {
+      print("Error fetching reserved seats: $e");
     }
-  } catch (e) {
-    print("Error fetching reserved seats: $e");
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -263,9 +264,11 @@ class _DetailsState extends State<Details> {
                                   setState(() {
                                     // Toggle clicked state (red or back to grey)
                                     if (!isClicked) {
-                                      clickedSeats.add(seatCounter); // Mark seat as clicked (red)
+                                      clickedSeats.add(
+                                          seatCounter); // Mark seat as clicked (red)
                                     } else {
-                                      clickedSeats.remove(seatCounter); // Unclick (reset color)
+                                      clickedSeats.remove(
+                                          seatCounter); // Unclick (reset color)
                                     }
                                   });
                                 },
@@ -274,14 +277,16 @@ class _DetailsState extends State<Details> {
                                 ? Colors.red // Reserved seats are red
                                 : isClicked
                                     ? Colors.red // Selected seats are red
-                                    : const Color.fromARGB(255, 0, 255, 64), // Default available color
+                                    : const Color.fromARGB(255, 0, 255,
+                                        64), // Default available color
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                             padding: EdgeInsets.zero,
                             minimumSize: Size(60, 60),
                           ),
-                          child: Icon(Icons.chair_alt_rounded), // Optional: Add any child widget (like icon/text) if needed
+                          child: Icon(Icons
+                              .chair_alt_rounded), // Optional: Add any child widget (like icon/text) if needed
                         ),
                       );
                     }
