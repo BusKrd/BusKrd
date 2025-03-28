@@ -170,10 +170,10 @@ class _DriverProfileState extends State<DriverProfile> {
               child: ListView(
                 padding: const EdgeInsets.only(top: 45, left: 22, right: 22),
                 children: [
-                  _options("Driver information", Icons.person, DriverInformation()),
+                  _options("Driver information", Icons.person, DriverInformation(enteredCode: widget.enteredCode)),
                   _options("Bus information", Icons.bus_alert, BusInformation()),
-                  _options("Settings", Icons.settings, DriverInformation()),
-                  _options("About us", Icons.help_outline, DriverInformation()),
+                  _options("Settings", Icons.settings, DriverInformation(enteredCode: widget.enteredCode,)),
+                  _options("About us", Icons.help_outline, DriverInformation(enteredCode: widget.enteredCode,)),
                 ],
               ),
             ),

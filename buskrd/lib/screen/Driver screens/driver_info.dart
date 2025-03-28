@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class DriverInformation extends StatefulWidget {
-  const DriverInformation({super.key});
+  final String enteredCode;
+  const DriverInformation({super.key, required this.enteredCode});
 
   @override
   State<DriverInformation> createState() => _DriverInformationState();
@@ -14,6 +15,13 @@ class DriverInformation extends StatefulWidget {
 class _DriverInformationState extends State<DriverInformation> {
   String valueChoose = "";
   List<String> listItem = ["Male", "Female"];
+
+  TextEditingController firstnameController = TextEditingController();
+  TextEditingController lastnameController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  PhoneNumber? phoneNumber;
   File? _image;
 
   Future<void> _pickImage(ImageSource source) async {
@@ -27,12 +35,28 @@ class _DriverInformationState extends State<DriverInformation> {
     }
   }
 
-  TextEditingController firstnameController = TextEditingController();
-  TextEditingController lastnameController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  Future<Map<String, dynamic>?> fetchDriverInfo() async {
+  try {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('drivers')
+        .doc(widget.enteredCode)
+        .collection('info')
+        .doc('driverInfo')
+        .get();
 
-  PhoneNumber? phoneNumber;
+    if (doc.exists) {
+      return doc.data() as Map<String, dynamic>;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    print("Error fetching driver info: $e");
+    return null;
+  }
+}
+
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -65,86 +89,123 @@ class _DriverInformationState extends State<DriverInformation> {
     );
   }
 
-  Widget _page() {
-    return Padding(
-      padding: const EdgeInsets.all(14.0),
-      child: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _HeaderText(),
-              const SizedBox(height: 25),
-              _imageCircle(),
-              const SizedBox(height: 25),
-              _inputField("First name", firstnameController, "First Name:"),
-              const SizedBox(height: 5),
-              _inputField("Last name", lastnameController, "Last Name:"),
-              const SizedBox(height: 5),
-              _inputField("Age", ageController, "Age:"),
-              const SizedBox(height: 5),
-              _genderDropdown("Gender:"),
-              const SizedBox(height: 10),
-              _phoneNumberInput("Phone Number:"),
-              const SizedBox(height: 10),
-              _nextBtn(),
-            ],
+Map<String, dynamic> originalData = {}; // Store initial values
+
+Widget _page() {
+  
+  return FutureBuilder<Map<String, dynamic>?>(
+    future: fetchDriverInfo(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError || !snapshot.hasData) {
+        return const Center(child: Text("Error loading data", style: TextStyle(color: Colors.white)));
+      } else {
+        Map<String, dynamic> data = snapshot.data!;
+        originalData = Map.from(data); // Store the original values
+        
+        // Pre-fill controllers with Firestore data
+        firstnameController.text = data["firstName"] ?? "";
+        lastnameController.text = data["lastName"] ?? "";
+        ageController.text = data["age"]?.toString() ?? "";
+        valueChoose = data["gender"] ?? "";
+        
+
+        String phoneHint = "";
+        if (data["phone"] != null && data["phone"].startsWith("+964")) {
+          phoneHint = data["phone"].substring(4); // Remove '+964'
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(14.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _HeaderText(),
+                  const SizedBox(height: 25),
+                  _imageCircle(),
+                  const SizedBox(height: 25),
+                  _inputField("First name", firstnameController, "First Name:", data["firstName"] ?? ""),
+                  const SizedBox(height: 5),
+                  _inputField("Last name", lastnameController, "Last Name:", data["lastName"] ?? ""),
+                  const SizedBox(height: 5),
+                  _inputField("Age", ageController, "Age:", data["age"]?.toString() ?? ""),
+                  const SizedBox(height: 5),
+                  _genderDropdown("Gender:", data["gender"] ?? ""),
+                  const SizedBox(height: 10),
+                  _phoneNumberInput("Phone Number:", phoneHint),
+                  const SizedBox(height: 10),
+                  saveBtn(), // Save button
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+    },
+  );
+}
+
+
+
+
+
+ Widget _genderDropdown(String labelText, String selectedGender) {
+  var border = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(18),
+    borderSide: const BorderSide(color: Colors.white),
+  );
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        labelText,
+        style: const TextStyle(color: Colors.white),
+      ),
+      const SizedBox(height: 5),
+      InputDecorator(
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          border: border,
+          enabledBorder: border,
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            value: listItem.contains(valueChoose) ? valueChoose : null, // Ensure it's in list
+            icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+            dropdownColor: const Color.fromARGB(255, 233, 30, 99),
+            style: const TextStyle(color: Colors.white),
+            hint: Text(
+              selectedGender.isNotEmpty ? selectedGender : 'Select Gender',
+              style: const TextStyle(color: Colors.white),
+            ),
+            isExpanded: true,
+            items: listItem.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  valueChoose = newValue; // Update state correctly
+                });
+              }
+            },
           ),
         ),
       ),
-    );
-  }
+    ],
+  );
+}
 
-  Widget _genderDropdown(String labelText) {
-    var border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(18),
-      borderSide: const BorderSide(color: Colors.white),
-    );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          labelText,
-          style: const TextStyle(color: Colors.white),
-        ),
-        const SizedBox(height: 5),
-        InputDecorator(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            border: border,
-            enabledBorder: border,
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: valueChoose.isNotEmpty && listItem.contains(valueChoose)
-                  ? valueChoose
-                  : null,
-              icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-              dropdownColor: const Color.fromARGB(255, 233, 30, 99),
-              style: const TextStyle(color: Colors.white),
-              hint: const Text(
-                "Select Gender",
-                style: TextStyle(color: Colors.white),
-              ),
-              underline: const SizedBox(),
-              isExpanded: true,
-              items: listItem.map((String value) {
-                return DropdownMenuItem<String>(
-                    value: value, child: Text(value));
-              }).toList(),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    valueChoose = newValue;
-                  });
-                }
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+
+  
+
 
   Widget _HeaderText() {
     return const Text(
@@ -199,100 +260,151 @@ class _DriverInformationState extends State<DriverInformation> {
     );
   }
 
-  Widget _inputField(
-      String hintText, TextEditingController controller, String labelText) {
-    var border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(18),
-      borderSide: const BorderSide(color: Colors.white),
-    );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          labelText,
-          style: const TextStyle(color: Colors.white),
+ Widget _inputField(String hintText, TextEditingController controller, String labelText, String hintValue) {
+  var border = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(18),
+    borderSide: const BorderSide(color: Colors.white),
+  );
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        labelText,
+        style: const TextStyle(color: Colors.white),
+      ),
+      const SizedBox(height: 5),
+      TextField(
+        style: const TextStyle(color: Colors.white),
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintValue.isNotEmpty ? hintValue : hintText,
+          hintStyle: const TextStyle(color: Colors.white),
+          enabledBorder: border,
+          focusedBorder: border,
+          filled: false,
         ),
-        const SizedBox(height: 5),
-        TextField(
-          style: const TextStyle(color: Colors.white),
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: hintText,
+      ),
+    ],
+  );
+}
+
+
+Widget _phoneNumberInput(String labelText, String hintText) {
+  var border = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(18),
+    borderSide: const BorderSide(color: Colors.white),
+  );
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        labelText,
+        style: const TextStyle(color: Colors.white),
+      ),
+      const SizedBox(height: 5),
+      InputDecorator(
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          border: border,
+          enabledBorder: border,
+        ),
+        child: InternationalPhoneNumberInput(
+          onInputChanged: (PhoneNumber number) {
+            setState(() {
+              phoneNumber = number;
+            });
+          },
+          selectorConfig: const SelectorConfig(
+            selectorType: PhoneInputSelectorType.DIALOG,
+          ),
+          ignoreBlank: false,
+          autoValidateMode: AutovalidateMode.onUserInteraction,
+          selectorTextStyle: const TextStyle(color: Colors.white),
+          textStyle: const TextStyle(color: Colors.white),
+          textFieldController: phoneController,
+          keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+          initialValue: PhoneNumber(isoCode: 'IQ'), // Set default to Iraq
+          inputDecoration: InputDecoration(
+            hintText: hintText.isNotEmpty ? hintText : 'Phone number', // Set the hint
             hintStyle: const TextStyle(color: Colors.white),
-            enabledBorder: border,
-            focusedBorder: border,
+            border: InputBorder.none,
             filled: false,
           ),
         ),
-      ],
-    );
+      ),
+    ],
+  );
+}
+
+
+
+
+
+
+Widget saveBtn() {
+  return ElevatedButton(
+    onPressed: () async {
+      await _saveChanges();
+    },
+    style: ElevatedButton.styleFrom(
+      shape: const StadiumBorder(),
+      backgroundColor: const Color(0xFFFEB958),
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+    ),
+    child: const SizedBox(
+      width: 90,
+      child: Text(
+        "Save Changes",
+        textAlign: TextAlign.center,
+      ),
+    ),
+  );
+}
+
+Future<void> _saveChanges() async {
+  Map<String, dynamic> updatedData = {};
+
+  // Check if the fields have changed
+  if (firstnameController.text != (originalData["firstName"] ?? "")) {
+    updatedData["firstName"] = firstnameController.text;
+  }
+  if (lastnameController.text != (originalData["lastName"] ?? "")) {
+    updatedData["lastName"] = lastnameController.text;
+  }
+  if (ageController.text != (originalData["age"]?.toString() ?? "")) {
+    updatedData["age"] = int.tryParse(ageController.text) ?? 0;
+  }
+  if (valueChoose != (originalData["gender"] ?? "")) {
+    updatedData["gender"] = valueChoose;
+  }
+  if (phoneNumber != null && phoneNumber!.phoneNumber != (originalData["phone"] ?? "")) {
+    updatedData["phone"] = phoneNumber!.phoneNumber;
   }
 
-  Widget _phoneNumberInput(String labelText) {
-    var border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(18),
-      borderSide: const BorderSide(color: Colors.white),
+  // If no changes, do nothing
+  if (updatedData.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("No changes detected!"))
     );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          labelText,
-          style: const TextStyle(color: Colors.white),
-        ),
-        const SizedBox(height: 5),
-        InputDecorator(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            border: border,
-            enabledBorder: border,
-          ),
-          child: InternationalPhoneNumberInput(
-            onInputChanged: (PhoneNumber number) {
-              setState(() {
-                phoneNumber = number;
-              });
-            },
-            onInputValidated: (bool value) {
-              print(value ? 'Valid phone number' : 'Invalid phone number');
-            },
-            selectorConfig: const SelectorConfig(
-              selectorType: PhoneInputSelectorType.DIALOG,
-            ),
-            ignoreBlank: false,
-            autoValidateMode: AutovalidateMode.onUserInteraction,
-            selectorTextStyle: const TextStyle(color: Colors.white),
-            textStyle: const TextStyle(color: Colors.white),
-            initialValue: PhoneNumber(isoCode: 'IQ'),
-            keyboardType: const TextInputType.numberWithOptions(
-                signed: true, decimal: true),
-            inputDecoration: const InputDecoration(
-              hintText: 'Phone number',
-              hintStyle: TextStyle(color: Colors.white),
-              border: InputBorder.none,
-              filled: false,
-            ),
-          ),
-        ),
-      ],
-    );
+    return;
   }
 
-  Widget _nextBtn() {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        backgroundColor: const Color(0xFFFEB958),
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-      ),
-      child: const SizedBox(
-        width: 90,
-        child: Text(
-          "Save Changes",
-          textAlign: TextAlign.center,
-        ),
-      ),
+  try {
+    await FirebaseFirestore.instance
+        .collection('drivers')
+        .doc(widget.enteredCode)
+        .collection('info')
+        .doc('driverInfo')
+        .update(updatedData);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Changes saved successfully!"))
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Error updating data: $e"))
     );
   }
+}
 }
