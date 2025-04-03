@@ -5,7 +5,12 @@ import 'package:get/get.dart';
 import 'package:buskrd/authentication.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
-  const VerificationCodeScreen({super.key});
+  final String phoneNumber;
+  final String countryCode;
+  const VerificationCodeScreen({super.key,
+    required this.phoneNumber,
+    required this.countryCode,
+  });
 
   @override
   State<VerificationCodeScreen> createState() => _VerificationCodeScreenState();
@@ -46,7 +51,18 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromARGB(255, 156, 39, 176),
+            Color.fromARGB(255, 233, 30, 99),
+          ],
+        ),
+      ),
+      child: Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -109,7 +125,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildCodeBox(TextEditingController controller, FocusNode focusNode, FocusNode? nextFocusNode) {
@@ -147,11 +163,32 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   }
 
   Widget _resendButton() {
-    return TextButton(
-      onPressed: () {
-        print("Resend code requested");
-        // Add logic to resend OTP
-      },
+    bool isResendDisabled = false;
+    return ElevatedButton(
+  onPressed: isResendDisabled
+      ? null // If disabled, button remains unclickable
+      : () async {
+          setState(() {
+            isResendDisabled = true; // Disable the button
+          });
+
+          try {
+            await phoneNumberAuth.phoneAuth(widget.countryCode, widget.phoneNumber, context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("OTP Resent Successfully")),
+            );
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Failed to resend OTP: ${e.toString()}")),
+            );
+          }
+
+          // Wait for 30 seconds before re-enabling the button
+          await Future.delayed(Duration(seconds: 30));
+          setState(() {
+            isResendDisabled = false;
+          });
+        },
       child: RichText(
         text: const TextSpan(
           text: 'Resend Code',

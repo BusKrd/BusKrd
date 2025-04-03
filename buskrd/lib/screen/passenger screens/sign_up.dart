@@ -217,7 +217,7 @@ class _SignupPageState extends State<Signup> {
           String phoneNumberWithoutCode = phoneNumber!.phoneNumber!.replaceAll(countryCode, '');
 
           try {
-            await phoneNumberAuth.phoneAuth(countryCode, phoneNumberWithoutCode);
+            await phoneNumberAuth.phoneAuth(countryCode, phoneNumberWithoutCode, context);
           } catch (e) {
             Get.snackbar("Error", "Failed to send OTP: ${e.toString()}");
           }

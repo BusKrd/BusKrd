@@ -1,4 +1,7 @@
+import 'package:buskrd/screen/verification_code.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class PhoneNumberAuth {
@@ -6,7 +9,7 @@ class PhoneNumberAuth {
   PhoneNumberAuth(this._auth);
   var verificationid = ''.obs;
 
-  Future<void> phoneAuth(String countryCode, String phoneNumber) async {
+  Future<void> phoneAuth(String countryCode, String phoneNumber, BuildContext context) async {
     String fullPhoneNumber = '$countryCode$phoneNumber';
 
     try {
@@ -14,18 +17,28 @@ class PhoneNumberAuth {
         phoneNumber: fullPhoneNumber,
         verificationCompleted: (credential) async {
           await _auth.signInWithCredential(credential);
-          Get.offAllNamed('/home'); // Navigate to home after successful verification
+          Get.offAllNamed(
+              '/home'); // Navigate to home after successful verification
         },
         verificationFailed: (e) {
           if (e.code == 'invalid-phone-number') {
             Get.snackbar("Error", "The phone number provided is invalid");
           } else {
-            Get.snackbar("Error", e.message ?? "Something went wrong, try again");
+            Get.snackbar(
+                "Error", e.message ?? "Something went wrong, try again");
           }
         },
         codeSent: (verificationid, int? resendtoken) {
           this.verificationid.value = verificationid;
-          Get.toNamed('/verification'); // Navigate to OTP verification screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VerificationCodeScreen(
+                phoneNumber: phoneNumber, // Pass the full phone number
+                countryCode: countryCode,
+              ),
+            ),
+          ); // Navigate to OTP verification screen
         },
         codeAutoRetrievalTimeout: (verificationid) {
           this.verificationid.value = verificationid;
