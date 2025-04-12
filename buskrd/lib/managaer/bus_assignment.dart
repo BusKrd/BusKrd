@@ -31,10 +31,9 @@ class _AssignBusState extends State<AssignBus> {
   @override
   void initState() {
     super.initState();
-    fetchCities(); // Fetch cities when the screen loads
+    fetchCities();
   }
 
-  /// Fetch cities from Firestore
   void fetchCities() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
@@ -54,17 +53,14 @@ class _AssignBusState extends State<AssignBus> {
     }
   }
 
-  /// Fetch buses and driver info based on selected city
   void fetchBusesForCity(String city) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    
 
     try {
       QuerySnapshot driversSnapshot =
           await firestore.collection("drivers").get();
 
       for (var driverDoc in driversSnapshot.docs) {
-        // Fetch busInfo
         DocumentSnapshot busInfoDoc = await firestore
             .collection("drivers")
             .doc(driverDoc.id)
@@ -72,7 +68,6 @@ class _AssignBusState extends State<AssignBus> {
             .doc("busInfo")
             .get();
 
-        // Fetch driverInfo
         DocumentSnapshot driverInfoDoc = await firestore
             .collection("drivers")
             .doc(driverDoc.id)
@@ -86,12 +81,10 @@ class _AssignBusState extends State<AssignBus> {
           Map<String, dynamic> driverData =
               driverInfoDoc.data() as Map<String, dynamic>;
 
-          // Construct full name from firstName and lastName
           String firstName = driverData["firstName"] ?? "Unknown";
           String lastName = driverData["lastName"] ?? "";
           String fullName = "$firstName $lastName".trim();
 
-          // Check if the city is Sulaymaniyah and plate number starts with "21"
           if (city == "Sulaymaniyah" &&
               busData["plateNumber"] != null &&
               busData["plateNumber"].toString().startsWith("21")) {
@@ -122,7 +115,6 @@ class _AssignBusState extends State<AssignBus> {
               "driverName": fullName,
               "phoneNumber": driverData["phone"] ?? "No Phone",
             });
-
           }
         }
       }
@@ -136,7 +128,6 @@ class _AssignBusState extends State<AssignBus> {
     }
   }
 
-  /// Dropdown for selecting city
   Widget _dropdownField(String hintText, TextEditingController controller) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(22),
@@ -145,7 +136,7 @@ class _AssignBusState extends State<AssignBus> {
 
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
-        filled: true, // Ensures background color is applied
+        filled: true,
         fillColor: Colors.white,
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.white),
@@ -168,7 +159,6 @@ class _AssignBusState extends State<AssignBus> {
     );
   }
 
-  /// Checkbox list for buses, showing plate number, driver full name, and phone
   Widget _busCheckboxList() {
     return Column(
       children: buses.asMap().entries.map((entry) {
@@ -224,7 +214,6 @@ class _AssignBusState extends State<AssignBus> {
   void _showBusDialog(Map<String, dynamic> bus) {
     String plateNumber = bus["plateNumber"];
 
-    // Initialize values if they don’t exist
     if (!selectedBusDetails.containsKey(plateNumber)) {
       selectedBusDetails[plateNumber] = {
         "destination": "",
@@ -351,7 +340,7 @@ class _AssignBusState extends State<AssignBus> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 60), // Space for the button
+                const SizedBox(height: 60),
               ],
             ),
           ),
@@ -368,20 +357,14 @@ class _AssignBusState extends State<AssignBus> {
                 ),
               ),
               onPressed: () async {
-                // Check if any bus is selected
                 bool anyBusSelected = selectedBuses.values.contains(true);
 
                 if (!anyBusSelected) {
-                  // If no bus is selected, show the dialog
                   _showPleaseSelectBusDialog();
                 } else {
-                  // Get the source and date values
-                  String source =
-                      sourceController.text.trim(); // Get the source city
-                  String selectedDate = dateController.text
-                      .trim(); // Get the date from the date controller
+                  String source = sourceController.text.trim();
+                  String selectedDate = dateController.text.trim();
 
-                  // Call the method to save bus details
                   await saveBusDetailsToFirestore(
                       source, selectedBusDetails, selectedDate);
                   _resetScreen();
@@ -400,146 +383,110 @@ class _AssignBusState extends State<AssignBus> {
   }
 
   Future<void> saveBusDetailsToFirestore(
-    String source,
-    Map<String, Map<String, String>> selectedBusDetails,
-    String dateString) async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+      String source,
+      Map<String, Map<String, String>> selectedBusDetails,
+      String dateString) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  // Convert the date string from the dateController to a DateTime object
-  DateTime selectedDate = DateTime.parse(dateString); // Assuming the date is in "yyyy-MM-dd" format
-  String formattedDate = "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
-  Timestamp timestamp = Timestamp.fromDate(selectedDate); // Convert to Firestore timestamp
+    DateTime selectedDate = DateTime.parse(dateString);
+    String formattedDate =
+        "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
+    Timestamp timestamp = Timestamp.fromDate(selectedDate);
 
-  // Debugging - check values
-  print("Formatted date: $formattedDate");
+    print("Formatted date: $formattedDate");
 
-  for (var entry in selectedBuses.entries) {
-    if (entry.value) {
-      // Process only selected buses
-      String plateNumber = entry.key;
-      Map<String, String> busDetails = selectedBusDetails[plateNumber] ?? {};
+    for (var entry in selectedBuses.entries) {
+      if (entry.value) {
+        String plateNumber = entry.key;
+        Map<String, String> busDetails = selectedBusDetails[plateNumber] ?? {};
 
-      String destination = busDetails["destination"] ?? "";
-      String route = busDetails["route"] ?? "";
-      String time = busDetails["time"] ?? "";
-      int reservedSeats = 0;
+        String destination = busDetails["destination"] ?? "";
+        String route = busDetails["route"] ?? "";
+        String time = busDetails["time"] ?? "";
+        int reservedSeats = 0;
 
-      // Get the bus number from the buses list
-      String busNumber = buses.firstWhere(
-          (bus) => bus["plateNumber"] == plateNumber)["busNumber"];
+        String busNumber = buses.firstWhere(
+            (bus) => bus["plateNumber"] == plateNumber)["busNumber"];
 
-      String docName = "";
-      // Check if source and destination match specific conditions
-      if (source == "Sulaymaniyah" && destination == "Erbil") {
-        docName = "FJ6gDgls0EhZPmq2Sr5e";
-      }
-      else if (source == "Sulaymaniyah" && destination == "Kirkuk") {
-        docName = "YwiwQPElXpQVeDW5bsow";
-      }
-
-      // Check if docName or dateString is empty
-      print("docName: $docName");
-      print("formattedDate: $formattedDate");
-
-      if (docName.isEmpty || formattedDate.isEmpty) {
-        print("Error: docName or formattedDate is empty!");
-        return; // Early exit if any value is invalid
-      }
-
-      try {
-        // Now we will check for all availableBuses documents for the selected date
-        QuerySnapshot existingAssignments = await firestore
-            .collection("availableBuses")
-            .get(); // Fetch all documents in the availableBuses collection
-
-        if (existingAssignments.docs.isEmpty) {
-          print("No documents found in availableBuses collection.");
+        String docName = "";
+        if (source == "Sulaymaniyah" && destination == "Erbil") {
+          docName = "FJ6gDgls0EhZPmq2Sr5e";
+        } else if (source == "Sulaymaniyah" && destination == "Kirkuk") {
+          docName = "YwiwQPElXpQVeDW5bsow";
         }
 
-        // Loop through all available bus documents and check for conflicts
-        bool busAlreadyAssigned = false;
+        print("docName: $docName");
+        print("formattedDate: $formattedDate");
 
-        for (var doc in existingAssignments.docs) {
-          QuerySnapshot dateAssignmentsSnapshot = await doc.reference
-              .collection(formattedDate) // Get the subcollection for the specific date
-              .get();
+        if (docName.isEmpty || formattedDate.isEmpty) {
+          print("Error: docName or formattedDate is empty!");
+          return;
+        }
 
-          for (var busDoc in dateAssignmentsSnapshot.docs) {
-            Map<String, dynamic> busData = busDoc.data() as Map<String, dynamic>;
+        try {
+          QuerySnapshot existingAssignments =
+              await firestore.collection("availableBuses").get();
 
-            // Check if the same bus has already been assigned for the same date
-            if (busData["plateNumber"] == plateNumber) {
-              busAlreadyAssigned = true;
+          if (existingAssignments.docs.isEmpty) {
+            print("No documents found in availableBuses collection.");
+          }
+
+          bool busAlreadyAssigned = false;
+
+          for (var doc in existingAssignments.docs) {
+            QuerySnapshot dateAssignmentsSnapshot =
+                await doc.reference.collection(formattedDate).get();
+
+            for (var busDoc in dateAssignmentsSnapshot.docs) {
+              Map<String, dynamic> busData =
+                  busDoc.data() as Map<String, dynamic>;
+
+              if (busData["plateNumber"] == plateNumber) {
+                busAlreadyAssigned = true;
+                break;
+              }
+            }
+
+            if (busAlreadyAssigned) {
               break;
             }
           }
 
           if (busAlreadyAssigned) {
-            break;
+            _showAlreadyAssignedDialog();
+          } else {
+            await firestore
+                .collection("availableBuses")
+                .doc(docName)
+                .collection(formattedDate)
+                .doc(busNumber)
+                .set({
+              'selectedSeats': FieldValue.arrayUnion([]),
+              'reservedSeats': reservedSeats,
+              "timestamp": timestamp,
+              "source": source,
+              "destination": destination,
+              "route": route,
+              "time": time,
+              "plateNumber": plateNumber,
+              "busNumber": busNumber,
+              "driverName": buses.firstWhere(
+                  (bus) => bus["plateNumber"] == plateNumber)["driverName"],
+              "phoneNumber": buses.firstWhere(
+                  (bus) => bus["plateNumber"] == plateNumber)["phoneNumber"],
+            });
+
+            print("Bus $plateNumber assigned successfully.");
           }
+        } catch (e) {
+          print("Error checking if bus is assigned: $e");
         }
-
-        if (busAlreadyAssigned) {
-          _showAlreadyAssignedDialog();
-        } else {
-          // Proceed with saving the bus details if no conflicts
-          await firestore
-              .collection("availableBuses")
-              .doc(docName)
-              .collection(formattedDate) // Subcollection for the specific date
-              .doc(busNumber) // Each bus has its own document with bus number as ID
-              .set({
-            'selectedSeats': FieldValue.arrayUnion([]),
-            'reservedSeats': reservedSeats,
-            "timestamp": timestamp,
-            "source": source,
-            "destination": destination,
-            "route": route,
-            "time": time,
-            "plateNumber": plateNumber,
-            "busNumber": busNumber, // Include the bus number
-            "driverName": buses.firstWhere(
-                (bus) => bus["plateNumber"] == plateNumber)["driverName"],
-            "phoneNumber": buses.firstWhere(
-                (bus) => bus["plateNumber"] == plateNumber)["phoneNumber"],
-          });
-
-          print("Bus $plateNumber assigned successfully.");
-        }
-      } catch (e) {
-        print("Error checking if bus is assigned: $e");
       }
     }
+
+    print("All selected buses have been processed.");
   }
 
-  print("All selected buses have been processed.");
-}
-
-
-
-void _showConflictingAssignmentDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Bus Conflict Detected"),
-        content: const Text(
-            "This bus has already been assigned to a different route for the selected date."),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-            },
-            child: const Text("OK"),
-          ),
-        ],
-      );
-    },
-  );
-}
-
-
-  /// Show a dialog indicating that the bus is already assigned
   void _showAlreadyAssignedDialog() {
     showDialog(
       context: context,
@@ -551,7 +498,7 @@ void _showConflictingAssignmentDialog() {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text("OK"),
             ),
@@ -561,7 +508,6 @@ void _showConflictingAssignmentDialog() {
     );
   }
 
-  /// Show a dialog asking the user to select a bus
   void _showPleaseSelectBusDialog() {
     showDialog(
       context: context,
@@ -572,7 +518,7 @@ void _showConflictingAssignmentDialog() {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text("OK"),
             ),
@@ -582,21 +528,16 @@ void _showConflictingAssignmentDialog() {
     );
   }
 
-  // Method to reset the screen
-void _resetScreen() {
-  // Clear the text fields
-  sourceController.clear();
-  dateController.clear();
+  void _resetScreen() {
+    sourceController.clear();
+    dateController.clear();
 
-  // Reset the selected buses and set them all to false
-  setState(() {
-    selectedBuses.clear();
-    
-    // Re-initialize the selectedBuses map with false for each bus
-    selectedBuses = {for (var bus in busList) bus["plateNumber"]: false};
-    
-    selectedBusDetails.clear();
-  });
-}
+    setState(() {
+      selectedBuses.clear();
 
+      selectedBuses = {for (var bus in busList) bus["plateNumber"]: false};
+
+      selectedBusDetails.clear();
+    });
+  }
 }

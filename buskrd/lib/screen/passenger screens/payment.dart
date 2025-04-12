@@ -9,7 +9,7 @@ class Payment extends StatefulWidget {
   final String city2;
   final String date;
   final List<int> selectedSeats;
-  final String docName ;
+  final String docName;
 
   const Payment(
       {super.key,
@@ -27,37 +27,31 @@ class Payment extends StatefulWidget {
 }
 
 class _PaymentState extends State<Payment> {
-  
-
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Increment the reserved seats based on the selected seats
   void incSeat() async {
     try {
-        // Query the bus collection for the correct bus document
       QuerySnapshot querySnapshot = await _firestore
           .collection("availableBuses")
           .doc(widget.docName)
           .collection(widget.date)
-          .where("busNumber", isEqualTo: widget.bus) // Filter buses by BusNum
+          .where("busNumber", isEqualTo: widget.bus)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Get the first matching document
         DocumentSnapshot busDoc = querySnapshot.docs.first;
-        String busDocId = busDoc.id; // The actual document ID
+        String busDocId = busDoc.id;
 
         print("Found bus document ID: $busDocId");
 
         int reservedSeats = busDoc["reservedSeats"] ?? 0;
         int selectedSeatsCount = widget.selectedSeats.length;
 
-        // Increment the reservedSeats by the number of selected seats
         await _firestore
             .collection("availableBuses")
             .doc(widget.docName)
             .collection(widget.date)
-            .doc(busDocId) // Use the found document ID
+            .doc(busDocId)
             .update({
           "reservedSeats": reservedSeats + selectedSeatsCount,
         });
@@ -71,7 +65,6 @@ class _PaymentState extends State<Payment> {
     }
   }
 
-  // Save selected seats to Firestore
   Future<void> saveSelectedSeats(List<int> selectedSeats) async {
     try {
       await _firestore
@@ -125,10 +118,9 @@ class _PaymentState extends State<Payment> {
       backgroundColor: Colors.transparent,
       body: Column(
         children: [
-          // Route Information
           Container(
-            width: double.infinity, // Make it fill horizontally
-            height: 180, // Adjust height as needed
+            width: double.infinity,
+            height: 180,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -137,10 +129,10 @@ class _PaymentState extends State<Payment> {
                   Color.fromARGB(255, 156, 39, 176),
                   Color.fromARGB(255, 233, 30, 99),
                 ],
-              ), // Background color
+              ),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30), // Rounded bottom-left corner
-                bottomRight: Radius.circular(30), // Rounded bottom-right corner
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
             ),
             child: Column(
@@ -150,7 +142,7 @@ class _PaymentState extends State<Payment> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      widget.city1, // City 1
+                      widget.city1,
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     const Icon(
@@ -158,17 +150,17 @@ class _PaymentState extends State<Payment> {
                       color: Colors.white,
                     ),
                     Text(
-                      widget.city2, // City 2
+                      widget.city2,
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ],
                 ),
                 Text(
-                  widget.time, // Bus time
+                  widget.time,
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 Text(
-                  widget.bus, // Bus name
+                  widget.bus,
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 Text(
@@ -179,7 +171,6 @@ class _PaymentState extends State<Payment> {
             ),
           ),
           const SizedBox(height: 20),
-          // Select Payment Method Title
           const Padding(
             padding: EdgeInsets.all(16.0),
             child: Text(
@@ -187,8 +178,6 @@ class _PaymentState extends State<Payment> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-
-          // Payment method buttons
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -197,21 +186,17 @@ class _PaymentState extends State<Payment> {
                 children: [
                   const SizedBox(height: 50),
                   SizedBox(
-                    width: 200, // Set a fixed width for both buttons
+                    width: 200,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Increment reserved seats by the selected seats
                         incSeat();
 
-                        // Save selected seats to Firestore
                         saveSelectedSeats(widget.selectedSeats);
 
-                        // Handle FIB payment method
                         print('Selected FIB');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color(0xFFFEB958), // Light grey background
+                        backgroundColor: const Color(0xFFFEB958),
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -226,17 +211,15 @@ class _PaymentState extends State<Payment> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20), // Space between buttons
+                  const SizedBox(height: 20),
                   SizedBox(
-                    width: 200, // Set a fixed width for both buttons
+                    width: 200,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle FastPay payment method
                         print('Selected FastPay');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color(0xFFFEB958), // Light grey background
+                        backgroundColor: const Color(0xFFFEB958),
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

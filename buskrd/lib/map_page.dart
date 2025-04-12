@@ -14,7 +14,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   LatLng mycurrentLoc = const LatLng(0, 0);
   late GoogleMapController googleMapController;
-  bool isLoading = true; // To show loading before fetching location
+  bool isLoading = true;
 
   static const kaziwa = LatLng(35.5548, 45.4890);
   static const bazar = LatLng(35.55687498181495, 45.44398410702944);
@@ -28,9 +28,9 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _initializeMap() async {
-    await _getInitialLocation(); // Get current location
-    List<LatLng> coordinates = await polyLinePoints(); // Fetch route
-    generatePolylines(coordinates); // Draw polyline
+    await _getInitialLocation();
+    List<LatLng> coordinates = await polyLinePoints();
+    generatePolylines(coordinates);
   }
 
   Future<void> _getInitialLocation() async {
@@ -49,16 +49,11 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? const Center(
-              child:
-                  CircularProgressIndicator()) // Show loading until location is fetched
+          ? const Center(child: CircularProgressIndicator())
           : GoogleMap(
               zoomControlsEnabled: false,
-
-              myLocationEnabled:
-                  true, // Enable the default "My Location" blue dot
-              myLocationButtonEnabled:
-                  true, // Enable the default "My Location" button
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
               initialCameraPosition:
                   CameraPosition(target: mycurrentLoc, zoom: 15),
               onMapCreated: (GoogleMapController controller) {
@@ -111,10 +106,9 @@ class _MapPageState extends State<MapPage> {
       mode: TravelMode.driving,
     );
 
-// Pass the request object properly
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       request: request,
-      googleApiKey: apiKey, // Correct usage // Use named parameter
+      googleApiKey: apiKey,
     );
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {

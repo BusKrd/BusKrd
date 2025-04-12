@@ -21,7 +21,8 @@ class _SignupPageState extends State<Signup> {
 
   PhoneNumber? phoneNumber;
 
-  final PhoneNumberAuth phoneNumberAuth = PhoneNumberAuth(FirebaseAuth.instance);
+  final PhoneNumberAuth phoneNumberAuth =
+      PhoneNumberAuth(FirebaseAuth.instance);
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +106,8 @@ class _SignupPageState extends State<Signup> {
               underline: const SizedBox(),
               isExpanded: true,
               items: listItem.map((String value) {
-                return DropdownMenuItem<String>(value: value, child: Text(value));
+                return DropdownMenuItem<String>(
+                    value: value, child: Text(value));
               }).toList(),
               onChanged: (String? newValue) {
                 if (newValue != null) {
@@ -151,7 +153,8 @@ class _SignupPageState extends State<Signup> {
     );
   }
 
-  Widget _inputField(IconData icon, hintText, TextEditingController controller) {
+  Widget _inputField(
+      IconData icon, hintText, TextEditingController controller) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
       borderSide: const BorderSide(color: Colors.white),
@@ -196,7 +199,8 @@ class _SignupPageState extends State<Signup> {
             selectorTextStyle: const TextStyle(color: Colors.white),
             textStyle: const TextStyle(color: Colors.white),
             initialValue: PhoneNumber(isoCode: 'IQ'),
-            keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(
+                signed: true, decimal: true),
             inputDecoration: const InputDecoration(
               hintText: 'Phone number',
               hintStyle: TextStyle(color: Colors.white),
@@ -214,10 +218,12 @@ class _SignupPageState extends State<Signup> {
       onPressed: () async {
         if (phoneNumber != null && phoneNumber!.phoneNumber != null) {
           String countryCode = phoneNumber!.dialCode ?? '';
-          String phoneNumberWithoutCode = phoneNumber!.phoneNumber!.replaceAll(countryCode, '');
+          String phoneNumberWithoutCode =
+              phoneNumber!.phoneNumber!.replaceAll(countryCode, '');
 
           try {
-            await phoneNumberAuth.phoneAuth(countryCode, phoneNumberWithoutCode, context);
+            await phoneNumberAuth.phoneAuth(
+                countryCode, phoneNumberWithoutCode, context);
           } catch (e) {
             Get.snackbar("Error", "Failed to send OTP: ${e.toString()}");
           }

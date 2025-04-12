@@ -14,16 +14,14 @@ class _InvitationDriverState extends State<InvitationDriver> {
   final TextEditingController _codeController = TextEditingController();
   bool _isLoading = false;
 
- // Function to check if the driver exists by the given code
   Future<bool> _checkDriverExistsByCode(String enteredCode) async {
     try {
-      DocumentSnapshot<Map<String, dynamic>> driverSnapshot = await FirebaseFirestore
-          .instance
-          .collection('drivers')
-          .doc(enteredCode)
-          .get();
+      DocumentSnapshot<Map<String, dynamic>> driverSnapshot =
+          await FirebaseFirestore.instance
+              .collection('drivers')
+              .doc(enteredCode)
+              .get();
 
-      // Return false if driver document does not exist
       return driverSnapshot.exists && driverSnapshot.data() != null;
     } catch (e) {
       print("Error checking driver document: $e");
@@ -38,9 +36,9 @@ class _InvitationDriverState extends State<InvitationDriver> {
           .doc(enteredCode)
           .collection('info');
 
-      // Fetch busInfo and driverInfo
       DocumentSnapshot busInfoSnapshot = await infoRef.doc('busInfo').get();
-      DocumentSnapshot driverInfoSnapshot = await infoRef.doc('driverInfo').get();
+      DocumentSnapshot driverInfoSnapshot =
+          await infoRef.doc('driverInfo').get();
 
       bool hasBusInfo = busInfoSnapshot.exists &&
           busInfoSnapshot.data() != null &&
@@ -57,8 +55,6 @@ class _InvitationDriverState extends State<InvitationDriver> {
     }
   }
 
-
-
   void _onSubmit() async {
     setState(() {
       _isLoading = true;
@@ -66,13 +62,11 @@ class _InvitationDriverState extends State<InvitationDriver> {
 
     String enteredCode = _codeController.text.trim();
 
-    // Check if the driver exists
     bool isDriverValid = await _checkDriverExistsByCode(enteredCode);
     if (!isDriverValid) {
       setState(() {
         _isLoading = false;
       });
-    // If driver is not valid, show a snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -82,33 +76,29 @@ class _InvitationDriverState extends State<InvitationDriver> {
           backgroundColor: Colors.red,
         ),
       );
-      return; // Stop execution here if the code is invalid
+      return;
     }
 
-     // If the driver exists, check if info (busInfo & driverInfo) exists
     bool isInfoComplete = await _checkDriverInfo(enteredCode);
 
     setState(() {
       _isLoading = false;
     });
 
- if (isInfoComplete) {
-      // If both busInfo and driverInfo exist → Navigate to HomeDriver screen
+    if (isInfoComplete) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomeDriver(enteredCode: enteredCode)), // Replace with your screen
+        MaterialPageRoute(
+            builder: (context) => HomeDriver(enteredCode: enteredCode)),
       );
-} else {
-      // If either busInfo or driverInfo is missing, navigate to BusSignup
+    } else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => BusSignup(enteredCode: enteredCode)),
+        MaterialPageRoute(
+            builder: (context) => BusSignup(enteredCode: enteredCode)),
       );
     }
   }
-  
-    
-  
 
   @override
   Widget build(BuildContext context) {

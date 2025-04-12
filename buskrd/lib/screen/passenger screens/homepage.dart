@@ -19,8 +19,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final TextEditingController _searchController = TextEditingController();
-  
-
 
   final List<Map<String, String>> buses = [
     {"Place": "Place 1"},
@@ -34,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
 
-    // Navigate to the Route screen when the second icon (index 1) is tapped
     if (index == 1) {
       Navigator.push(
         context,
@@ -78,18 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.transparent,
             elevation: 0,
-            toolbarHeight: 80, // Reduced the height for the search bar
+            toolbarHeight: 80,
             title: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment
-                    .spaceBetween, // Align search bar and button to opposite sides
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Search bar
                   Flexible(
                     child: Container(
-                      width: MediaQuery.of(context).size.width *
-                          0.75, // Adjust the width of the search bar
+                      width: MediaQuery.of(context).size.width * 0.75,
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -104,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           suffixIcon: Icon(Icons.search),
                         ),
                         style: const TextStyle(color: Colors.black),
-                        
                       ),
                     ),
                   ),
@@ -122,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         return AlertDialog(
                           title: const Text('Favorites'),
                           content: SizedBox(
-                            height: 400, // Adjust the height as needed
+                            height: 400,
                             width: double.maxFinite,
                             child: ListView.builder(
                               itemCount: buses.length,
@@ -141,14 +134,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        // Left side (Bus number and time interval)
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              buses[index]
-                                                  ["Place"]!, // Bus name
+                                              buses[index]["Place"]!,
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w600,
@@ -157,9 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ],
                                         ),
-                                        // Right side (Bus icon)
                                         const Icon(
-                                          Icons.favorite, // Bus icon
+                                          Icons.favorite,
                                           color: Colors.red,
                                           size: 30,
                                         ),
@@ -176,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 },
                 icon: const Icon(
-                  Icons.favorite_border_sharp, // Heart icon (outline)
+                  Icons.favorite_border_sharp,
                   color: Colors.white,
                   size: 30,
                 ),

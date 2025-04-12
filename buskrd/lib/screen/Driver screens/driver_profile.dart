@@ -17,6 +17,7 @@ class DriverProfile extends StatefulWidget {
   @override
   State<DriverProfile> createState() => _DriverProfileState();
 }
+
 class _DriverProfileState extends State<DriverProfile> {
   int _selectedIndex = 0;
   Map<String, dynamic>? driverInfo;
@@ -82,13 +83,14 @@ class _DriverProfileState extends State<DriverProfile> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DriverNotification(enteredCode: widget.enteredCode),
+          builder: (context) =>
+              DriverNotification(enteredCode: widget.enteredCode),
         ),
       );
     }
   }
 
-   String getInitials() {
+  String getInitials() {
     String firstName = driverInfo?['firstName'] ?? '';
     String lastName = driverInfo?['lastName'] ?? '';
 
@@ -99,7 +101,7 @@ class _DriverProfileState extends State<DriverProfile> {
     } else if (lastName.isNotEmpty) {
       return lastName[0].toUpperCase();
     } else {
-      return '?'; // Fallback when no name is available
+      return '?';
     }
   }
 
@@ -108,7 +110,6 @@ class _DriverProfileState extends State<DriverProfile> {
     return Scaffold(
       body: Stack(
         children: [
-          // User Profile Section
           Container(
             padding: const EdgeInsets.symmetric(vertical: 30),
             alignment: Alignment.center,
@@ -143,7 +144,8 @@ class _DriverProfileState extends State<DriverProfile> {
                     ? const CircularProgressIndicator(color: Colors.white)
                     : Text(
                         "${driverInfo?['firstName'] ?? 'No First Name'} ${driverInfo?['lastName'] ?? 'No Last Name'}",
-                        style: const TextStyle(color: Colors.white, fontSize: 20),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 20),
                       ),
                 const SizedBox(height: 10),
                 isLoading
@@ -170,10 +172,22 @@ class _DriverProfileState extends State<DriverProfile> {
               child: ListView(
                 padding: const EdgeInsets.only(top: 45, left: 22, right: 22),
                 children: [
-                  _options("Driver information", Icons.person, DriverInformation(enteredCode: widget.enteredCode)),
-                  _options("Bus information", Icons.bus_alert, BusInformation()),
-                  _options("Settings", Icons.settings, DriverInformation(enteredCode: widget.enteredCode,)),
-                  _options("About us", Icons.help_outline, DriverInformation(enteredCode: widget.enteredCode,)),
+                  _options("Driver information", Icons.person,
+                      DriverInformation(enteredCode: widget.enteredCode)),
+                  _options(
+                      "Bus information", Icons.bus_alert, BusInformation()),
+                  _options(
+                      "Settings",
+                      Icons.settings,
+                      DriverInformation(
+                        enteredCode: widget.enteredCode,
+                      )),
+                  _options(
+                      "About us",
+                      Icons.help_outline,
+                      DriverInformation(
+                        enteredCode: widget.enteredCode,
+                      )),
                 ],
               ),
             ),
@@ -201,7 +215,8 @@ class _DriverProfileState extends State<DriverProfile> {
         trailing: const Icon(Icons.arrow_forward_ios),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => next));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => next));
         },
       ),
     );

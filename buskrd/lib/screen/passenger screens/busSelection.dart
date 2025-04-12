@@ -21,7 +21,7 @@ class BusSelection extends StatefulWidget {
 }
 
 class _BusSelectionState extends State<BusSelection> {
-  List<String> cities = []; // Will store fetched city names
+  List<String> cities = [];
   List<Map<String, String>> buses = [];
   String docName = "";
 
@@ -29,10 +29,9 @@ class _BusSelectionState extends State<BusSelection> {
   void initState() {
     super.initState();
     fetchCities();
-    fetchBuses(); // Fetch cities when the screen loads
+    fetchBuses();
   }
 
-  // Function to fetch city names from Firestore
   void fetchCities() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
@@ -42,8 +41,7 @@ class _BusSelectionState extends State<BusSelection> {
       if (doc.exists) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         setState(() {
-          cities = List<String>.from(data["city"] ??
-              []); // Convert Firestore array to List<String> safely
+          cities = List<String>.from(data["city"] ?? []);
         });
       } else {
         print("Document does not exist");
@@ -55,9 +53,7 @@ class _BusSelectionState extends State<BusSelection> {
 
   void fetchBuses() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    
 
-    // Determine the correct document
     if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Erbil") {
       docName = "FJ6gDgls0EhZPmq2Sr5e";
     } else if (widget.city1 == "Sulaymaniyah" && widget.city2 == "Kirkuk") {
@@ -68,7 +64,6 @@ class _BusSelectionState extends State<BusSelection> {
     }
 
     try {
-
       QuerySnapshot querySnapshot = await firestore
           .collection("availableBuses")
           .doc(docName)
@@ -88,9 +83,9 @@ class _BusSelectionState extends State<BusSelection> {
         buses = querySnapshot.docs.map((doc) {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
           return {
-            "bus": data["busNumber"].toString(), // Bus name
-            "time": data["time"].toString(), // Time interval
-            "route": data["route"].toString(), // Route
+            "bus": data["busNumber"].toString(),
+            "time": data["time"].toString(),
+            "route": data["route"].toString(),
             "reservedSeats": data["reservedSeats"].toString(),
           };
         }).toList();
@@ -99,9 +94,6 @@ class _BusSelectionState extends State<BusSelection> {
       print("Error fetching buses: $e");
     }
   }
-
-  // Input Field Widget
-  
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +121,7 @@ class _BusSelectionState extends State<BusSelection> {
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
             iconTheme: const IconThemeData(
-              color: Colors.white, // Set the back arrow color to white
+              color: Colors.white,
             ),
           ),
         ),
@@ -137,10 +129,9 @@ class _BusSelectionState extends State<BusSelection> {
       backgroundColor: Colors.transparent,
       body: Column(
         children: [
-          // Top Half with rounded bottom corners (now filling horizontally)
           Container(
-            width: double.infinity, // Make it fill horizontally
-            height: 172, // Adjust height as needed
+            width: double.infinity,
+            height: 172,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -149,40 +140,39 @@ class _BusSelectionState extends State<BusSelection> {
                   Color.fromARGB(255, 156, 39, 176),
                   Color.fromARGB(255, 233, 30, 99),
                 ],
-              ), // Background color
+              ),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30), // Rounded bottom-left corner
-                bottomRight: Radius.circular(30), // Rounded bottom-right corner
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
             ),
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.city1, // City 1
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    const Icon(
-                      Icons.arrow_downward_rounded,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      widget.city2, // City 2
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      widget.date, // Date
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ],
-                ),
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.city1,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  const Icon(
+                    Icons.arrow_downward_rounded,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    widget.city2,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.date,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ],
+              ),
             ),
           ),
-          // Bottom Half with list of buses and rounded top corners
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -190,8 +180,7 @@ class _BusSelectionState extends State<BusSelection> {
               ),
               child: Column(
                 children: [
-                  const SizedBox(
-                      height: 20), // Space between container top and title
+                  const SizedBox(height: 20),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
@@ -203,7 +192,7 @@ class _BusSelectionState extends State<BusSelection> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10), // Space after the title
+                  const SizedBox(height: 10),
                   Expanded(
                     child: ListView.builder(
                       itemCount: buses.length,
@@ -228,7 +217,7 @@ class _BusSelectionState extends State<BusSelection> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      buses[index]["bus"]!, // Bus name
+                                      buses[index]["bus"]!,
                                       style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w600,
@@ -237,7 +226,7 @@ class _BusSelectionState extends State<BusSelection> {
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
-                                      buses[index]["time"]!, // Time interval
+                                      buses[index]["time"]!,
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -246,7 +235,7 @@ class _BusSelectionState extends State<BusSelection> {
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
-                                      buses[index]["route"]!, // Route
+                                      buses[index]["route"]!,
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -255,7 +244,6 @@ class _BusSelectionState extends State<BusSelection> {
                                     ),
                                   ],
                                 ),
-                                
                                 Column(
                                   children: [
                                     const Icon(
@@ -265,7 +253,7 @@ class _BusSelectionState extends State<BusSelection> {
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
-                                      '(${reservedSeats}/12)', // Display available seats
+                                      '(${reservedSeats}/12)',
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -288,7 +276,6 @@ class _BusSelectionState extends State<BusSelection> {
                                     city2: widget.city2,
                                     date: widget.date,
                                     docName: docName,
-                                    
                                   ),
                                 ),
                               );

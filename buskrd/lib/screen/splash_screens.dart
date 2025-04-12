@@ -18,23 +18,20 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    // Initialize the animation controller
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     );
 
-    // Define the zoom-in animation
     _animation = Tween<double>(begin: 0.5, end: 1.6).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    // Start the animation
     _controller.forward();
 
-    // Navigate to the signup screen after a 3-second delay (2 seconds for animation + 1 second hold)
     Timer(const Duration(seconds: 3), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> DecisionsScreen()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => DecisionsScreen()));
     });
   }
 
@@ -59,14 +56,12 @@ class _SplashScreenState extends State<SplashScreen>
             ],
           ),
         ),
-        
         child: Center(
           child: ScaleTransition(
             scale: _animation,
             child: Image.asset(
               'assets/images/new_logo.png',
               width: 150,
-              //height: 300,
             ),
           ),
         ),

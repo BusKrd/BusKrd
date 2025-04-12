@@ -8,8 +8,6 @@ import 'package:buskrd/screen/passenger%20screens/route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-
-
 class SeatReservation extends StatefulWidget {
   @override
   _SeatReservationState createState() => _SeatReservationState();
@@ -21,15 +19,14 @@ class _SeatReservationState extends State<SeatReservation> {
   final TextEditingController toController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
 
-  List<String> cities = []; // Will store fetched city names
+  List<String> cities = [];
 
   @override
   void initState() {
     super.initState();
-    fetchCities(); // Fetch cities when the screen loads
+    fetchCities();
   }
 
-  // Function to fetch city names from Firestore
   void fetchCities() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
@@ -39,8 +36,7 @@ class _SeatReservationState extends State<SeatReservation> {
       if (doc.exists) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         setState(() {
-          cities = List<String>.from(data["city"] ??
-              []); // Convert Firestore array to List<String> safely
+          cities = List<String>.from(data["city"] ?? []);
         });
       } else {
         print("Document does not exist");
@@ -77,7 +73,6 @@ class _SeatReservationState extends State<SeatReservation> {
     }
   }
 
-  // Dropdown field widget (same as before, but dynamic)
   Widget _dropdownField(String hintText, TextEditingController controller) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(22),
@@ -135,7 +130,6 @@ class _SeatReservationState extends State<SeatReservation> {
       body: SafeArea(
         child: Column(
           children: [
-            // UI remains the same, just replacing static cities with dynamic data
             Container(
               height: MediaQuery.of(context).size.height * 0.35,
               decoration: const BoxDecoration(
@@ -171,7 +165,6 @@ class _SeatReservationState extends State<SeatReservation> {
                 ),
               ),
             ),
-
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

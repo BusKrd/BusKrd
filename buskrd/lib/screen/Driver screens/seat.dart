@@ -4,12 +4,9 @@ import 'package:flutter/widgets.dart';
 
 class Details extends StatefulWidget {
   final Map<String, dynamic> data;
-  final String selectedDate; // Add a field for the selected date
+  final String selectedDate;
 
-  const Details(
-      {super.key,
-      required this.data,
-      required this.selectedDate}); // Accept selectedDate in the constructor
+  const Details({super.key, required this.data, required this.selectedDate});
 
   @override
   State<Details> createState() => _DetailsState();
@@ -32,7 +29,6 @@ class _DetailsState extends State<Details> {
   String time = "";
   String busNumber = "";
 
-  // Track clicked seats by their seat number (based on grid)
   List<int> clickedSeats = [];
   List<int> reservedSeats = [];
   String docName = "";
@@ -40,12 +36,9 @@ class _DetailsState extends State<Details> {
   @override
   void initState() {
     super.initState();
-    // You can leave initState empty for now, we will set docName and fetch seats in build
   }
 
-  // Function to set docName and fetch reserved seats
   void setDocNameAndFetchSeats() {
-    // Now that source and destination are correctly set in `build`, we can use them.
     if (source == "Sulaymaniyah" && destination == "Erbil") {
       docName = "FJ6gDgls0EhZPmq2Sr5e";
     } else if (source == "Sulaymaniyah" && destination == "Kirkuk") {
@@ -55,7 +48,6 @@ class _DetailsState extends State<Details> {
       return;
     }
 
-    // Fetch reserved seats after setting docName
     _fetchReservedSeats();
   }
 
@@ -129,7 +121,6 @@ class _DetailsState extends State<Details> {
           fetchedSeats.addAll(List<int>.from(doc['selectedSeats'] ?? []));
         }
 
-        // Only call setState if the widget is still mounted
         if (mounted) {
           setState(() {
             reservedSeats = fetchedSeats;
@@ -149,7 +140,6 @@ class _DetailsState extends State<Details> {
     destination = widget.data['destination'] ?? 'N/A';
     busNumber = widget.data['busNumber'] ?? 'N/A';
 
-    // Set docName and fetch reserved seats when the widget is built
     setDocNameAndFetchSeats();
 
     return Scaffold(
@@ -176,7 +166,6 @@ class _DetailsState extends State<Details> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Display the selected date
             Padding(
               padding: const EdgeInsets.all(2.0),
               child: Text(
@@ -184,7 +173,6 @@ class _DetailsState extends State<Details> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -205,7 +193,6 @@ class _DetailsState extends State<Details> {
                 ),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Text(
@@ -221,8 +208,6 @@ class _DetailsState extends State<Details> {
               ),
             ),
             SizedBox(height: 50),
-
-            // Seat Layout
             Column(
               children: seatPattern.asMap().entries.map((entry) {
                 int rowIndex = entry.key;
@@ -234,10 +219,8 @@ class _DetailsState extends State<Details> {
                     int seatIndex = seatEntry.key;
                     String seat = seatEntry.value;
 
-                    // Calculate seatCounter based on row and column
                     int seatCounter = rowIndex * row.length + seatIndex + 1;
 
-                    // Check if this seat is already reserved (from Firestore)
                     bool isReserved = reservedSeats.contains(seatCounter);
 
                     if (seat == "_") {
@@ -262,31 +245,26 @@ class _DetailsState extends State<Details> {
                               ? null
                               : () {
                                   setState(() {
-                                    // Toggle clicked state (red or back to grey)
                                     if (!isClicked) {
-                                      clickedSeats.add(
-                                          seatCounter); // Mark seat as clicked (red)
+                                      clickedSeats.add(seatCounter);
                                     } else {
-                                      clickedSeats.remove(
-                                          seatCounter); // Unclick (reset color)
+                                      clickedSeats.remove(seatCounter);
                                     }
                                   });
                                 },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isReserved
-                                ? Colors.red // Reserved seats are red
+                                ? Colors.red
                                 : isClicked
-                                    ? Colors.red // Selected seats are red
-                                    : const Color.fromARGB(255, 0, 255,
-                                        64), // Default available color
+                                    ? Colors.red
+                                    : const Color.fromARGB(255, 0, 255, 64),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                             padding: EdgeInsets.zero,
                             minimumSize: Size(60, 60),
                           ),
-                          child: Icon(Icons
-                              .chair_alt_rounded), // Optional: Add any child widget (like icon/text) if needed
+                          child: Icon(Icons.chair_alt_rounded),
                         ),
                       );
                     }
@@ -295,7 +273,6 @@ class _DetailsState extends State<Details> {
               }).toList(),
             ),
             SizedBox(height: 20),
-            // Legend
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -323,10 +300,8 @@ class _DetailsState extends State<Details> {
               ],
             ),
             SizedBox(height: 60),
-            // Confirm Button - Navigate to the next screen
             ElevatedButton(
               onPressed: () {
-                // Increment reserved seats and save selected seats
                 incSeat();
                 saveSelectedSeats(clickedSeats);
               },

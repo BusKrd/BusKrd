@@ -35,17 +35,15 @@ class _SeatLayoutState extends State<SeatLayout> {
     ["s", "s", "s", "s"],
   ];
 
-  // Track clicked seats by their seat number (based on grid)
   List<int> clickedSeats = [];
-  List<int> reservedSeats = []; // List to hold seats from Firestore
+  List<int> reservedSeats = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchReservedSeats(); // Fetch reserved seats from Firestore
+    _fetchReservedSeats();
   }
 
-  // Fetch reserved seats from Firestore
   void _fetchReservedSeats() async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -95,7 +93,6 @@ class _SeatLayoutState extends State<SeatLayout> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Seat Layout
               Column(
                 children: seatPattern.asMap().entries.map((entry) {
                   int rowIndex = entry.key;
@@ -107,10 +104,8 @@ class _SeatLayoutState extends State<SeatLayout> {
                       int seatIndex = seatEntry.key;
                       String seat = seatEntry.value;
 
-                      // Calculate seatCounter based on row and column
                       int seatCounter = rowIndex * row.length + seatIndex + 1;
 
-                      // Check if this seat is already reserved (from Firestore)
                       bool isReserved = reservedSeats.contains(seatCounter);
 
                       if (seat == "_") {
@@ -135,27 +130,26 @@ class _SeatLayoutState extends State<SeatLayout> {
                                 ? null
                                 : () {
                                     setState(() {
-                                      // Toggle clicked state (red or back to grey)
                                       if (!isClicked) {
-                                        clickedSeats.add(seatCounter); // Mark seat as clicked (red)
+                                        clickedSeats.add(seatCounter);
                                       } else {
-                                        clickedSeats.remove(seatCounter); // Unclick (reset color)
+                                        clickedSeats.remove(seatCounter);
                                       }
                                     });
                                   },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: isReserved
-                                  ? Colors.transparent // Red if the seat is reserved
+                                  ? Colors.transparent
                                   : isClicked
-                                      ? Colors.transparent // Change color to red if clicked
-                                      : Colors.grey[300], // Default available color
+                                      ? Colors.transparent
+                                      : Colors.grey[300],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               padding: EdgeInsets.zero,
                               minimumSize: Size(60, 60),
                             ),
-                            child: Icon(Icons.chair_alt_rounded), // Optional: Add any child widget (like icon/text) if needed
+                            child: Icon(Icons.chair_alt_rounded),
                           ),
                         );
                       }
@@ -164,7 +158,6 @@ class _SeatLayoutState extends State<SeatLayout> {
                 }).toList(),
               ),
               SizedBox(height: 20),
-              // Legend
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -194,10 +187,8 @@ class _SeatLayoutState extends State<SeatLayout> {
                 ],
               ),
               SizedBox(height: 60),
-              // Confirm Button - Navigate to the next screen
               ElevatedButton(
                 onPressed: () {
-                  // Pass the selected seats to the next screen
                   Navigator.push(
                     context,
                     MaterialPageRoute(

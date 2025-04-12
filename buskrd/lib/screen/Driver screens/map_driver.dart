@@ -14,7 +14,7 @@ class MapPageDriver extends StatefulWidget {
 class _MapPageDriverState extends State<MapPageDriver> {
   LatLng mycurrentLoc = const LatLng(0, 0);
   late GoogleMapController googleMapController;
-  bool isLoading = true; // To show loading before fetching location
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -23,10 +23,8 @@ class _MapPageDriverState extends State<MapPageDriver> {
   }
 
   void _initializeMap() async {
-    await _getInitialLocation(); // Get current location
+    await _getInitialLocation();
   }
-
-
 
   Future<void> _getInitialLocation() async {
     try {
@@ -44,32 +42,27 @@ class _MapPageDriverState extends State<MapPageDriver> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? const Center(
-              child:
-                  CircularProgressIndicator()) // Show loading until location is fetched
+          ? const Center(child: CircularProgressIndicator())
           : GoogleMap(
               zoomControlsEnabled: false,
-              myLocationEnabled:
-                  true, // Enable the default "My Location" blue dot
-              myLocationButtonEnabled:
-                  true, // Enable the default "My Location" button
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
               initialCameraPosition:
                   CameraPosition(target: mycurrentLoc, zoom: 15),
               onMapCreated: (GoogleMapController controller) {
                 googleMapController = controller;
               },
               markers: {
-                Marker(
-                    markerId: MarkerId('current location'),
-                    icon: BitmapDescriptor.defaultMarker,
-                    position:mycurrentLoc),}
-            ),
-      // Add a Floating Action Button to center the map on the current location
+                  Marker(
+                      markerId: MarkerId('current location'),
+                      icon: BitmapDescriptor.defaultMarker,
+                      position: mycurrentLoc),
+                }),
       floatingActionButton: FloatingActionButton(
         onPressed: _goToCurrentLocation,
         child: const Icon(Icons.my_location),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat, // Position the FAB at the bottom left
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 
@@ -91,7 +84,6 @@ class _MapPageDriverState extends State<MapPageDriver> {
     return await Geolocator.getCurrentPosition();
   }
 
-  // Function to move the camera to the current location
   void _goToCurrentLocation() async {
     try {
       Position position = await _currentLocation();

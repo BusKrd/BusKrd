@@ -8,29 +8,28 @@ class BusInformation extends StatefulWidget {
 }
 
 class _BusInformationState extends State<BusInformation> {
-  TextEditingController busNumController=TextEditingController();
-  TextEditingController plateNumController=TextEditingController();
+  TextEditingController busNumController = TextEditingController();
+  TextEditingController plateNumController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 156, 39, 176),
-              Color.fromARGB(255, 233, 30, 99),
-            ],
-          ),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromARGB(255, 156, 39, 176),
+            Color.fromARGB(255, 233, 30, 99),
+          ],
         ),
-        child: Scaffold(
-          appBar: AppBar(
-       
-        iconTheme: const IconThemeData(color: Colors.white),
-     backgroundColor: Colors.transparent,
-        elevation: 0,
       ),
-      body: SingleChildScrollView(
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(14.0),
             child: _page(),
@@ -48,16 +47,14 @@ class _BusInformationState extends State<BusInformation> {
       child: Center(
         child: SingleChildScrollView(
           child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center, 
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              
               _HeaderText(),
               const SizedBox(height: 50),
               _inputField("Bus number", busNumController, "Bus number:"),
               const SizedBox(height: 5),
               _inputField("Plate number", plateNumController, "Plate number:"),
-                     
               const SizedBox(height: 10),
               _nextBtn(),
             ],
@@ -77,7 +74,6 @@ class _BusInformationState extends State<BusInformation> {
     );
   }
 
-  
   Widget _inputField(
       String hintText, TextEditingController controller, String labelText) {
     var border = OutlineInputBorder(
@@ -107,7 +103,6 @@ class _BusInformationState extends State<BusInformation> {
     );
   }
 
-  
   Widget _nextBtn() {
     return ElevatedButton(
       onPressed: () {},
@@ -124,5 +119,5 @@ class _BusInformationState extends State<BusInformation> {
         ),
       ),
     );
-    }
+  }
 }

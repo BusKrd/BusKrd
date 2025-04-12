@@ -9,7 +9,8 @@ class PhoneNumberAuth {
   PhoneNumberAuth(this._auth);
   var verificationid = ''.obs;
 
-  Future<void> phoneAuth(String countryCode, String phoneNumber, BuildContext context) async {
+  Future<void> phoneAuth(
+      String countryCode, String phoneNumber, BuildContext context) async {
     String fullPhoneNumber = '$countryCode$phoneNumber';
 
     try {
@@ -17,8 +18,7 @@ class PhoneNumberAuth {
         phoneNumber: fullPhoneNumber,
         verificationCompleted: (credential) async {
           await _auth.signInWithCredential(credential);
-          Get.offAllNamed(
-              '/home'); // Navigate to home after successful verification
+          Get.offAllNamed('/home');
         },
         verificationFailed: (e) {
           if (e.code == 'invalid-phone-number') {
@@ -34,11 +34,11 @@ class PhoneNumberAuth {
             context,
             MaterialPageRoute(
               builder: (context) => VerificationCodeScreen(
-                phoneNumber: phoneNumber, // Pass the full phone number
+                phoneNumber: phoneNumber,
                 countryCode: countryCode,
               ),
             ),
-          ); // Navigate to OTP verification screen
+          );
         },
         codeAutoRetrievalTimeout: (verificationid) {
           this.verificationid.value = verificationid;

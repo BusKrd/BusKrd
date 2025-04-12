@@ -1,7 +1,4 @@
-
 import 'package:buskrd/screen/passenger%20screens/passenger_info.dart';
-
-
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
 import 'package:buskrd/screen/passenger%20screens/homepage.dart';
 import 'package:buskrd/screen/passenger%20screens/passenger_notification.dart';
@@ -18,7 +15,6 @@ class PassengerProfile extends StatefulWidget {
 
 class _PassengerProfileState extends State<PassengerProfile> {
   int _selectedIndex = 0;
-  
 
   void _onItemTapped(int index) {
     setState(() {
@@ -37,7 +33,7 @@ class _PassengerProfileState extends State<PassengerProfile> {
     } else if (index == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) =>  SeatReservation()),
+        MaterialPageRoute(builder: (context) => SeatReservation()),
       );
     } else if (index == 3) {
       Navigator.push(
@@ -52,19 +48,19 @@ class _PassengerProfileState extends State<PassengerProfile> {
     return Scaffold(
       body: Stack(
         children: [
-          // User Profile Section
           Container(
             padding: const EdgeInsets.symmetric(vertical: 30),
             alignment: Alignment.center,
             decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 156, 39, 176),
-                Color.fromARGB(255, 233, 30, 99),
-              ],
-            ),),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.fromARGB(255, 156, 39, 176),
+                  Color.fromARGB(255, 233, 30, 99),
+                ],
+              ),
+            ),
             child: const Column(
               children: [
                 Stack(
@@ -74,9 +70,7 @@ class _PassengerProfileState extends State<PassengerProfile> {
                       backgroundColor: Colors.white,
                       child: Icon(Icons.person,
                           size: 50, color: Color.fromARGB(255, 10, 57, 122)),
-                    
-                      ),
-                    
+                    ),
                   ],
                 ),
                 SizedBox(height: 10),
@@ -121,53 +115,51 @@ class _PassengerProfileState extends State<PassengerProfile> {
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 0),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const PassengerAccInfo()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const PassengerAccInfo()));
                       },
                     ),
                   ),
                   Container(
-                    height: 51, // Reduced height for the "Settings" box
+                    height: 51,
                     margin: const EdgeInsets.only(bottom: 5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: const Color.fromARGB(255, 213, 212, 212),
                     ),
                     child: ListTile(
-                      leading: const Icon(Icons.settings,
-                          color: Colors.black), // Icon for settings
+                      leading: const Icon(Icons.settings, color: Colors.black),
                       title: const Text('Settings'),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 0), // Adjusted padding
-                      onTap: () {
-                        // Navigate to settings
-                      },
+                          horizontal: 12, vertical: 0),
+                      onTap: () {},
                     ),
                   ),
                   Container(
-                    height: 51, // Reduced height for the "Help" box
+                    height: 51,
                     margin: const EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: const Color.fromARGB(255, 213, 212, 212),
                     ),
                     child: ListTile(
-                      leading: const Icon(Icons.help,
-                          color: Colors.black), // Icon for help
+                      leading: const Icon(Icons.help, color: Colors.black),
                       title: const Text('Help'),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 0), // Adjusted padding
-                      onTap: () {
-                        // Navigate to help
-                      },
+                          horizontal: 12, vertical: 0),
+                      onTap: () {},
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        ], //children
+        ],
       ),
       bottomNavigationBar: BottomNavigation(
         selectedIndex: _selectedIndex,

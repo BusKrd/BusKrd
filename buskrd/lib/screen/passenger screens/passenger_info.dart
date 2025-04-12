@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class PassengerAccInfo extends StatefulWidget {
-
   const PassengerAccInfo({super.key});
 
   @override

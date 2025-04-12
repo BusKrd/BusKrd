@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:buskrd/screen/Driver%20screens/signup_driver.dart';
 
-
 class BusSignup extends StatefulWidget {
-  final String enteredCode; // Accept entered code
+  final String enteredCode;
   const BusSignup({super.key, required this.enteredCode});
 
   @override
@@ -15,17 +14,15 @@ class BusSignup extends StatefulWidget {
 class _BusSignupState extends State<BusSignup> {
   final TextEditingController busNumberController = TextEditingController();
   final TextEditingController plateNumberController = TextEditingController();
-  
 
   Future<bool> isBusInfoUnique(String busNumber, String plateNumber) async {
     try {
-      final driversCollection = FirebaseFirestore.instance.collection('drivers');
+      final driversCollection =
+          FirebaseFirestore.instance.collection('drivers');
 
-      // Get all driver documents
       final driversSnapshot = await driversCollection.get();
 
       for (var driverDoc in driversSnapshot.docs) {
-        // Reference to `busInfo` document inside `info` subcollection
         final busInfoRef = driversCollection
             .doc(driverDoc.id)
             .collection('info')
@@ -37,17 +34,17 @@ class _BusSignupState extends State<BusSignup> {
           final busData = busInfoSnapshot.data();
 
           if (busData != null) {
-            // Check if busNumber or plateNumber already exists
-            if (busData['busNumber'] == busNumber || busData['plateNumber'] == plateNumber) {
-              return false; // Duplicate found
+            if (busData['busNumber'] == busNumber ||
+                busData['plateNumber'] == plateNumber) {
+              return false;
             }
           }
         }
       }
-      return true; // No duplicates found
+      return true;
     } catch (e) {
       print("Error checking uniqueness: $e");
-      return false; // Assume not unique in case of error
+      return false;
     }
   }
 
@@ -69,10 +66,10 @@ class _BusSignupState extends State<BusSignup> {
     }
 
     try {
-      // Firestore reference to the `busInfo` document inside the `info` subcollection
-      DocumentReference<Map<String, dynamic>> busInfoRef = FirebaseFirestore.instance
+      DocumentReference<Map<String, dynamic>> busInfoRef = FirebaseFirestore
+          .instance
           .collection('drivers')
-          .doc(widget.enteredCode) // Use the entered code
+          .doc(widget.enteredCode)
           .collection('info')
           .doc('busInfo');
 
@@ -89,7 +86,9 @@ class _BusSignupState extends State<BusSignup> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SignupDriver(enteredCode: widget.enteredCode)),
+        MaterialPageRoute(
+            builder: (context) =>
+                SignupDriver(enteredCode: widget.enteredCode)),
       );
     } catch (e) {
       Get.snackbar("Error", "Failed to add data: $e",
@@ -137,7 +136,8 @@ class _BusSignupState extends State<BusSignup> {
               ),
               const SizedBox(height: 30),
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.8),
                   borderRadius: BorderRadius.circular(12),

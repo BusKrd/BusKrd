@@ -22,46 +22,41 @@ class _SignupDriverState extends State<SignupDriver> {
 
   PhoneNumber? phoneNumber;
 
-  
-      
   @override
   Widget build(BuildContext context) {
-    
     return Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 156, 39, 176),
-              Color.fromARGB(255, 233, 30, 99),
-            ],
-          ),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromARGB(255, 156, 39, 176),
+            Color.fromARGB(255, 233, 30, 99),
+          ],
         ),
-        child: Scaffold(
-      appBar: AppBar(
-       
-        iconTheme: const IconThemeData(color: Colors.white),
-     backgroundColor: Colors.transparent,
-        elevation: 0,
       ),
-      backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 156, 39, 176),
-              Color.fromARGB(255, 233, 30, 99),
-            ],
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        backgroundColor: Colors.transparent,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 156, 39, 176),
+                Color.fromARGB(255, 233, 30, 99),
+              ],
+            ),
           ),
+          child: _page(),
         ),
-        child: _page(),
       ),
-        ),
-      );
-    
+    );
   }
 
   Widget _page() {
@@ -135,8 +130,6 @@ class _SignupDriverState extends State<SignupDriver> {
     );
   }
 
-
-
   Widget _inputField(String hintText, TextEditingController controller) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
@@ -173,7 +166,6 @@ class _SignupDriverState extends State<SignupDriver> {
             onInputValidated: (bool value) {
               print(value ? 'Valid phone number' : 'Invalid phone number');
             },
-            
             selectorConfig: const SelectorConfig(
               selectorType: PhoneInputSelectorType.DIALOG,
             ),
@@ -181,9 +173,9 @@ class _SignupDriverState extends State<SignupDriver> {
             autoValidateMode: AutovalidateMode.onUserInteraction,
             selectorTextStyle: const TextStyle(color: Colors.white),
             textStyle: const TextStyle(color: Colors.white),
-            
             initialValue: PhoneNumber(isoCode: 'IQ'),
-            keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(
+                signed: true, decimal: true),
             inputDecoration: const InputDecoration(
               hintText: 'Phone number',
               hintStyle: TextStyle(color: Colors.white),
@@ -218,47 +210,50 @@ class _SignupDriverState extends State<SignupDriver> {
   }
 
   Future<void> saveDriverInfo(String enteredCode) async {
-  String firstName = firstnameController.text.trim();
-  String lastName = lastnameController.text.trim();
-  String age = ageController.text.trim();
-  String gender = valueChoose;
-  String phone = phoneNumber?.phoneNumber ?? "";
+    String firstName = firstnameController.text.trim();
+    String lastName = lastnameController.text.trim();
+    String age = ageController.text.trim();
+    String gender = valueChoose;
+    String phone = phoneNumber?.phoneNumber ?? "";
 
-  if (firstName.isEmpty || lastName.isEmpty || age.isEmpty || gender.isEmpty || phone.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Please fill in all fields")),
-    );
-    return;
-  }
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        age.isEmpty ||
+        gender.isEmpty ||
+        phone.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please fill in all fields")),
+      );
+      return;
+    }
 
-  try {
-    await FirebaseFirestore.instance
-        .collection('drivers') // Change this to your correct collection
-        .doc(enteredCode)
-        .collection('info')
-        .doc('driverInfo')
-        .set({
-      'firstName': firstName,
-      'lastName': lastName,
-      'age': age,
-      'gender': gender,
-      'phone': phone,
-    });
+    try {
+      await FirebaseFirestore.instance
+          .collection('drivers')
+          .doc(enteredCode)
+          .collection('info')
+          .doc('driverInfo')
+          .set({
+        'firstName': firstName,
+        'lastName': lastName,
+        'age': age,
+        'gender': gender,
+        'phone': phone,
+      });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Driver information saved successfully!")),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Driver information saved successfully!")),
+      );
 
-    // Navigate to HomeDriver
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomeDriver(enteredCode:widget.enteredCode)),
-    );
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Error saving data: $e")),
-    );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomeDriver(enteredCode: widget.enteredCode)),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error saving data: $e")),
+      );
+    }
   }
 }
-
-  }

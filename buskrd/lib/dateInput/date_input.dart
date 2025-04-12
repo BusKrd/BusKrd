@@ -22,7 +22,8 @@ class _DateInputState extends State<DateInput> {
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
-widget.dateController.text = "${picked.year.toString().padLeft(4, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+        widget.dateController.text =
+            "${picked.year.toString().padLeft(4, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
       });
     }
   }
@@ -33,7 +34,7 @@ widget.dateController.text = "${picked.year.toString().padLeft(4, '0')}-${picked
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255), // Light lavender background
+        color: const Color.fromARGB(255, 255, 255, 255),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -93,13 +94,13 @@ widget.dateController.text = "${picked.year.toString().padLeft(4, '0')}-${picked
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(
-                      color: Color(0xFF7E57C2), // Purple border
+                      color: Color(0xFF7E57C2),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(
-                      color: Color(0xFF5E35B1), // Darker purple on focus
+                      color: Color(0xFF5E35B1),
                       width: 2,
                     ),
                   ),
@@ -108,7 +109,7 @@ widget.dateController.text = "${picked.year.toString().padLeft(4, '0')}-${picked
                     color: Color(0xFF7E57C2),
                   ),
                 ),
-                onTap: () => _selectDate(context), // Open Date Picker on tap
+                onTap: () => _selectDate(context),
               ),
             ],
           ),

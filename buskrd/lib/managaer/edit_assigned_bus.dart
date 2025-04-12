@@ -89,7 +89,8 @@ class _EditAsBusesState extends State<EditAsBuses> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text("Route: ${bus['route'] ?? 'N/A'}"),
-                                    Text("Driver: ${bus['driverName'] ?? 'Unknown'}"),
+                                    Text(
+                                        "Driver: ${bus['driverName'] ?? 'Unknown'}"),
                                     Text("Time: ${bus['time'] ?? 'N/A'}"),
                                   ],
                                 ),
@@ -98,16 +99,21 @@ class _EditAsBusesState extends State<EditAsBuses> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Text('Bus Details - ${bus["busNumber"]}'),
+                                        title: Text(
+                                            'Bus Details - ${bus["busNumber"]}'),
                                         content: SingleChildScrollView(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Text('Date: ${dateController.text}'),
-                                              Text('Time: ${bus['time'] ?? 'N/A'}'),
-                                              Text('Route: ${bus['route'] ?? 'N/A'}'),
-                                              Text('Destination: ${bus['destination'] ?? 'Unknown'}'),
-                                              
+                                              Text(
+                                                  'Date: ${dateController.text}'),
+                                              Text(
+                                                  'Time: ${bus['time'] ?? 'N/A'}'),
+                                              Text(
+                                                  'Route: ${bus['route'] ?? 'N/A'}'),
+                                              Text(
+                                                  'Destination: ${bus['destination'] ?? 'Unknown'}'),
                                             ],
                                           ),
                                         ),

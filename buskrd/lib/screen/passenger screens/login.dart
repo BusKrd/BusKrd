@@ -1,4 +1,3 @@
-
 import 'package:buskrd/screen/passenger%20screens/homepage.dart';
 import 'package:buskrd/screen/passenger%20screens/sign_up.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,8 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   PhoneNumber? phoneNumber;
-  final PhoneNumberAuth phoneNumberAuth = PhoneNumberAuth(FirebaseAuth.instance);
+  final PhoneNumberAuth phoneNumberAuth =
+      PhoneNumberAuth(FirebaseAuth.instance);
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +50,11 @@ class _AccountPageState extends State<AccountPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Logo Section
                 Image.asset(
-                  'assets/images/new_logo.png', // Replace with your logo asset
+                  'assets/images/new_logo.png',
                   height: 200,
                 ),
                 const SizedBox(height: 60),
-
-                // Phone Number Input Section (using InternationalPhoneNumberInput)
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white),
@@ -72,7 +69,9 @@ class _AccountPageState extends State<AccountPage> {
                           });
                         },
                         onInputValidated: (bool value) {
-                          print(value ? 'Valid phone number' : 'Invalid phone number');
+                          print(value
+                              ? 'Valid phone number'
+                              : 'Invalid phone number');
                         },
                         initialValue: PhoneNumber(isoCode: 'IQ'),
                         inputDecoration: const InputDecoration(
@@ -80,7 +79,7 @@ class _AccountPageState extends State<AccountPage> {
                           hintStyle: TextStyle(color: Colors.white),
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
-                          filled: false, // Transparent background
+                          filled: false,
                         ),
                         selectorConfig: const SelectorConfig(
                           selectorType: PhoneInputSelectorType.DIALOG,
@@ -92,29 +91,29 @@ class _AccountPageState extends State<AccountPage> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 30),
-
-                // Login Button
                 SizedBox(
                   width: 150,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeScreen()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15), // Text color
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
                     ),
                     child: const Text(
                       'Login',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Divider and Sign-Up Suggestion
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

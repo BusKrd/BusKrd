@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 class PassengerNotification extends StatefulWidget {
   const PassengerNotification({super.key});
 
-
   @override
   State<PassengerNotification> createState() => _MyWidgetState();
 }
@@ -21,70 +20,65 @@ class _MyWidgetState extends State<PassengerNotification> {
       _selectedIndex = index;
     });
 
-    // Navigate to the Route screen when the second icon (index 1) is tapped
     if (index == 0) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
-    }
-    else if (index == 1) {
+    } else if (index == 1) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const RouteScreen()),
       );
-    }
-    else if (index == 2) {
+    } else if (index == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) =>  SeatReservation()),
+        MaterialPageRoute(builder: (context) => SeatReservation()),
       );
-    }
-    else if (index == 4) {
+    } else if (index == 4) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const PassengerProfile()),
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Top Section with Title
           Container(
             padding: EdgeInsets.symmetric(vertical: 30),
             alignment: Alignment.center,
             decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 156, 39, 176),
-                Color.fromARGB(255, 233, 30, 99),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.fromARGB(255, 156, 39, 176),
+                  Color.fromARGB(255, 233, 30, 99),
+                ],
+              ),
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: Text(
+                    'Notification',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
           ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 40), // Padding specifically at the top
-                child: Text(
-                  'Notification',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 28),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-          ),
-          // Bottom Section with ListTiles
           Padding(
-            padding: const EdgeInsets.only(top: 130), // Ensure it doesn't overlap the title
+            padding: const EdgeInsets.only(top: 130),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -101,45 +95,6 @@ class _MyWidgetState extends State<PassengerNotification> {
                     padding: EdgeInsets.only(top: 50, left: 22, right: 22),
                     child: ListView(
                       children: [
-                        // Notification Container 1
-                        Container(
-                          height: 51,
-                          margin: EdgeInsets.only(bottom: 5), 
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(255, 213, 212, 212),
-                          ),
-                          child: Stack(
-                            children: [
-                              // Main content (Title and Description)
-                              Padding(
-                                padding: EdgeInsets.only(right: 40),
-                                child: ListTile(
-                                  title: Text(
-                                    'Title \nDescription',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.black.withOpacity(0.7),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // Time at the top right
-                              Positioned(
-                                top: 10,
-                                right: 15,
-                                child: Text(
-                                  '12:30 PM', // Example time
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.black.withOpacity(0.6),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Notification Container 2
                         Container(
                           height: 51,
                           margin: EdgeInsets.only(bottom: 5),
@@ -149,7 +104,6 @@ class _MyWidgetState extends State<PassengerNotification> {
                           ),
                           child: Stack(
                             children: [
-                              // Main content (Title and Description)
                               Padding(
                                 padding: EdgeInsets.only(right: 40),
                                 child: ListTile(
@@ -162,12 +116,11 @@ class _MyWidgetState extends State<PassengerNotification> {
                                   ),
                                 ),
                               ),
-                              // Time at the top right
                               Positioned(
-                            top: 10,
+                                top: 10,
                                 right: 15,
                                 child: Text(
-                                  '01:45 PM', // Example time
+                                  '12:30 PM',
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.black.withOpacity(0.6),
@@ -177,7 +130,6 @@ class _MyWidgetState extends State<PassengerNotification> {
                             ],
                           ),
                         ),
-                        // Notification Container 3
                         Container(
                           height: 51,
                           margin: EdgeInsets.only(bottom: 5),
@@ -187,7 +139,6 @@ class _MyWidgetState extends State<PassengerNotification> {
                           ),
                           child: Stack(
                             children: [
-                              // Main content (Title and Description)
                               Padding(
                                 padding: EdgeInsets.only(right: 40),
                                 child: ListTile(
@@ -200,12 +151,46 @@ class _MyWidgetState extends State<PassengerNotification> {
                                   ),
                                 ),
                               ),
-                              // Time at the top right
                               Positioned(
                                 top: 10,
                                 right: 15,
                                 child: Text(
-                                  '02:10 PM', // Example time
+                                  '01:45 PM',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.black.withOpacity(0.6),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 51,
+                          margin: EdgeInsets.only(bottom: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: const Color.fromARGB(255, 213, 212, 212),
+                          ),
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 40),
+                                child: ListTile(
+                                  title: Text(
+                                    'Title \nDescription',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.black.withOpacity(0.7),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 10,
+                                right: 15,
+                                child: Text(
+                                  '02:10 PM',
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.black.withOpacity(0.6),
@@ -218,20 +203,18 @@ class _MyWidgetState extends State<PassengerNotification> {
                       ],
                     ),
                   ),
-
-                  // Small yellow cancel button
                   Positioned(
                     top: 15,
                     right: 25,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context); // Example action: go back
+                        Navigator.pop(context);
                       },
                       child: Container(
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          color:Color(0xFFFEB958),
+                          color: Color(0xFFFEB958),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -248,10 +231,10 @@ class _MyWidgetState extends State<PassengerNotification> {
           ),
         ],
       ),
-      bottomNavigationBar:BottomNavigation(
+      bottomNavigationBar: BottomNavigation(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
-      ), 
+      ),
     );
   }
 }

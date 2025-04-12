@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:buskrd/screen/passenger%20screens/homepage.dart';
 import 'package:buskrd/navigators/bottomNavigationBar.dart';
 import 'package:buskrd/screen/passenger%20screens/reservation.dart';
+
 class RouteScreen extends StatefulWidget {
   const RouteScreen({super.key});
 
@@ -15,7 +16,6 @@ class RouteScreen extends StatefulWidget {
 class _RouteScreenState extends State<RouteScreen> {
   int _selectedIndex = 1;
   final TextEditingController _searchController = TextEditingController();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +64,7 @@ class _RouteScreenState extends State<RouteScreen> {
                         hintStyle: TextStyle(color: Colors.black54),
                       ),
                       style: const TextStyle(color: Colors.black),
-                      onSubmitted: (value) {
-                      },
+                      onSubmitted: (value) {},
                     ),
                   ),
                 ],
@@ -97,7 +96,8 @@ class _RouteScreenState extends State<RouteScreen> {
           } else if (index == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const PassengerNotification()),
+              MaterialPageRoute(
+                  builder: (context) => const PassengerNotification()),
             );
           } else if (index == 4) {
             Navigator.push(

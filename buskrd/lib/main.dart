@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart'; // Import foundation.dart for kIsAndroid and kIsIOS
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart'; // Import firebase_core
+import 'package:firebase_core/firebase_core.dart';
 import 'package:buskrd/screen/splash_screens.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

@@ -2,7 +2,6 @@ import 'package:buskrd/managaer/dashboard.dart';
 import 'package:buskrd/managaer/bus_assignment.dart';
 import 'package:buskrd/screen/passenger%20screens/login.dart';
 import 'package:buskrd/screen/Driver%20screens/invitation_driver.dart';
-//import 'package:buskrd/screen/homepage.dart';
 import 'package:flutter/material.dart';
 
 class DecisionsScreen extends StatelessWidget {
@@ -11,7 +10,7 @@ class DecisionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  Color.fromARGB(255, 33, 32, 70),
+      backgroundColor: Color.fromARGB(255, 33, 32, 70),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -28,7 +27,7 @@ class DecisionsScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Spacer(), // Pushes everything below
+                const Spacer(),
                 Center(
                   child: SizedBox(
                     width: 200,
@@ -49,7 +48,7 @@ class DecisionsScreen extends StatelessWidget {
                               builder: (context) => const AccountPage()));
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                      backgroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       minimumSize: const Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
@@ -59,7 +58,6 @@ class DecisionsScreen extends StatelessWidget {
                     child: const Text(
                       'Passenger',
                       style: TextStyle(
-                        
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
@@ -87,7 +85,6 @@ class DecisionsScreen extends StatelessWidget {
                     child: const Text(
                       'Driver',
                       style: TextStyle(
-                       
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
@@ -95,8 +92,7 @@ class DecisionsScreen extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-
-                 Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
@@ -111,7 +107,7 @@ class DecisionsScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>  DashboardScreen(),
+                            builder: (context) => DashboardScreen(),
                           ),
                         );
                       },
@@ -128,8 +124,6 @@ class DecisionsScreen extends StatelessWidget {
                     ),
                   ],
                 )
-                
-                
               ],
             ),
           ),
