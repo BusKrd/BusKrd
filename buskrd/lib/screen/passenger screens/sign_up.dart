@@ -24,16 +24,10 @@ class _SignupPageState extends State<Signup> {
   final PhoneNumberAuth phoneNumberAuth =
       PhoneNumberAuth(FirebaseAuth.instance);
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      backgroundColor: Colors.transparent,
-      body: Container(
+    return  Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -44,7 +38,14 @@ class _SignupPageState extends State<Signup> {
             ],
           ),
         ),
-        child: _page(),
+        child : Scaffold(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      backgroundColor: Colors.transparent,
+      body:_page(),
       ),
     );
   }
@@ -89,7 +90,7 @@ class _SignupPageState extends State<Signup> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.man_outlined, color: Colors.white),
+          const Icon(Icons.male, color: Colors.white),
           const SizedBox(width: 8),
           Expanded(
             child: DropdownButton<String>(

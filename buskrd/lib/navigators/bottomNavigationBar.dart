@@ -15,10 +15,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
+      type: BottomNavigationBarType.shifting,
       currentIndex: widget.selectedIndex,
       onTap: widget.onItemTapped,
-      selectedItemColor: const Color.fromARGB(255, 255, 0, 0),
+      selectedItemColor: const Color.fromARGB(255, 156, 39, 176),
       unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
       items: const [
         BottomNavigationBarItem(
