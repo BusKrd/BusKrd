@@ -1,0 +1,2 @@
+C:/Users/NAN0-TECH/Documents/GitHub/BusKrd/buskrd/android/app/.cxx/RelWithDebInfo/6f251x57/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/NAN0-TECH/Documents/GitHub/BusKrd/buskrd/android/app/.cxx/RelWithDebInfo/6f251x57/armeabi-v7a/CMakeFiles/rebuild_cache.dir
