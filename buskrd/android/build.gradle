@@ -1,14 +1,19 @@
+// Define the Kotlin version globally
+ext.kotlin_version = '1.9.22'
+
 buildscript {
-    repositories{
+    repositories {
         google()
         mavenCentral()
     }
-    dependencies{
-        classpath 'com.android.tools.build:gradle:8.2.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22" // Update this line
-        classpath 'com.google.gms:google-services:4.4.2' 
+    dependencies {
+        // Use the Kotlin version defined above
+        classpath "com.android.tools.build:gradle:8.2.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"  // Kotlin Gradle plugin using ext.kotlin_version
+        classpath 'com.google.gms:google-services:4.4.2'
     }
 }
+
 allprojects {
     repositories {
         google()
@@ -20,6 +25,7 @@ rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 }
